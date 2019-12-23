@@ -1,0 +1,24 @@
+{
+    "name": "kikwik/user-bundle",
+    "description": "A super simple user bundle that provide very basic helpers for symfony 4 user management",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "authors": [
+        {
+            "name": "Davide Scarpato",
+            "email": "davide@kikwik.it"
+        }
+    ],
+    "require": {
+        "php": "^7.1.3",
+        "symfony/framework-bundle": "^4.4",
+        "stof/doctrine-extensions-bundle": "^1.3",
+        "kikwik/iptraceable-listener-bundle": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kikwik\\UserBundle\\": "src/"
+        }
+    }
+}
