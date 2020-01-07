@@ -2,9 +2,11 @@
 
 namespace Kikwik\UserBundle\Model;
 
+use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\IpTraceable\Traits\IpTraceableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 abstract class BaseUser implements UserInterface
@@ -15,6 +17,10 @@ abstract class BaseUser implements UserInterface
 
     use IpTraceableEntity;
 
+    /**************************************/
+    /* Password                           */
+    /**************************************/
+
     /**
      * Plain password. Used for model validation. Must not be persisted.
      *
@@ -24,13 +30,11 @@ abstract class BaseUser implements UserInterface
 
     /**
      * @var \DateTime|null
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="change", field={"password"})
      */
-    protected $lastLogin;
-
-    /**
-     * @var \DateTime|null
-     */
-    protected $previousLogin;
+    protected $passwordChangedAt;
 
     /**
      * @return string
@@ -51,17 +55,46 @@ abstract class BaseUser implements UserInterface
     /**
      * @return \DateTime|null
      */
-    public function getLastLogin(): ?\DateTime {
-        return $this->lastLogin;
+    public function getPasswordChangedAt(): ?\DateTime {
+        return $this->passwordChangedAt;
     }
 
     /**
-     * @param \DateTime|null $lastLogin
+     * @param \DateTime|null $passwordChangedAt
      * @return BaseUser
      */
-    public function setLastLogin(?\DateTime $lastLogin): BaseUser {
-        $this->lastLogin = $lastLogin;
+    public function setPasswordChangedAt(?\DateTime $passwordChangedAt): BaseUser {
+        $this->passwordChangedAt = $passwordChangedAt;
         return $this;
+    }
+
+    /**************************************/
+    /* login                              */
+    /**************************************/
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $lastLogin;
+
+    /**
+     * @var \DateTime|null
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $previousLogin;
+
+    /**
+     * @var integer
+     * @ORM\Column(type="integer", options={"default" : 0})
+     */
+    protected $loginCount = 0;
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getLastLogin(): ?\DateTime {
+        return $this->lastLogin;
     }
 
     /**
@@ -71,14 +104,13 @@ abstract class BaseUser implements UserInterface
         return $this->previousLogin;
     }
 
-    /**
-     * @param \DateTime|null $previousLogin
-     * @return BaseUser
-     */
-    public function setPreviousLogin(?\DateTime $previousLogin): BaseUser {
-        $this->previousLogin = $previousLogin;
-        return $this;
+    public function newLogin()
+    {
+        $this->previousLogin = $this->lastLogin;
+        $this->lastLogin = new \DateTime();
+        $this->loginCount++;
     }
+
 
 
 }

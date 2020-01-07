@@ -5,7 +5,10 @@
         http://symfony.com/schema/dic/services/services-1.0.xsd">
   <services>
 
-
+    <service id="kikwik_user.event_subscriber.login_subscriber" class="Kikwik\UserBundle\EventSubscriber\LoginSubscriber">
+      <argument type="service" id="doctrine.orm.entity_manager"/>
+      <tag name="kernel.event_subscriber" event="security.interactive_login"/>
+    </service>
 
   </services>
 </container>
