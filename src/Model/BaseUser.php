@@ -9,6 +9,10 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Class BaseUser
+ * @package Kikwik\UserBundle\Model
+ */
 abstract class BaseUser implements UserInterface
 {
     use TimestampableEntity;
@@ -104,13 +108,18 @@ abstract class BaseUser implements UserInterface
         return $this->previousLogin;
     }
 
+    /**
+     * @return int
+     */
+    public function getLoginCount(): int {
+        return $this->loginCount;
+    }
+
     public function newLogin()
     {
         $this->previousLogin = $this->lastLogin;
         $this->lastLogin = new \DateTime();
         $this->loginCount++;
     }
-
-
 
 }
