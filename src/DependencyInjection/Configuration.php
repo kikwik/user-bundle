@@ -14,7 +14,8 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                // todo: add configurations
+                ->scalarNode('user_class')->defaultValue('App\Entity\User')->cannotBeEmpty()->end()
+                ->scalarNode('user_identifier_field')->defaultValue('username')->cannotBeEmpty()->end()
             ->end()
         ;
 

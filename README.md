@@ -13,18 +13,6 @@ Make sure Composer is installed globally, as explained in the
 [installation chapter](https://getcomposer.org/doc/00-intro.md)
 of the Composer documentation.
 
-Applications that use Symfony Flex
-----------------------------------
-
-Open a command console, enter your project directory and execute:
-
-```console
-$ composer require kikwik/user-bundle
-```
-
-Applications that don't use Symfony Flex
-----------------------------------------
-
 ### Step 1: Download the Bundle
 
 Open a command console, enter your project directory and execute the
@@ -70,8 +58,16 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User extends BaseUser implements UserInterface
 {
-    ...
+    //...
 }
+```
+
+Create the `config/packages/kikwik_user.yaml` config file, set the user class and the unique identifier field name of your user
+
+```yaml
+kikwik_user:
+    user_class: App\Entity\User
+    user_identifier_field: email
 ```
 
 Enable timestampable and blameable doctrine extension in `config/packages/stof_doctrine_extensions.yaml`

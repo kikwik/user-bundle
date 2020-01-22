@@ -10,5 +10,13 @@
       <tag name="kernel.event_subscriber" event="security.interactive_login"/>
     </service>
 
+
+    <service id="kikwik_user.command.create_user_command" class="Kikwik\UserBundle\Command\CreateUserCommand">
+      <argument>%kikwik_user.user_class%</argument>
+      <argument>%kikwik_user.user_identifier_field%</argument>
+      <argument type="service" id="doctrine.orm.entity_manager"></argument>
+      <argument type="service" id="security.password_encoder"></argument>
+      <tag name="console.command" command="kikwik:user:create" />
+    </service>
   </services>
 </container>

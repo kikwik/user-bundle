@@ -19,9 +19,9 @@ class KikwikUserExtension extends Extension
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
-        // TODO: load configuration into the $definition
-        //$definition = $container->getDefinition('kikwik_user.some_params');
-        //$definition->setArgument(0, $config['some_params']);
+        $definition = $container->getDefinition('kikwik_user.command.create_user_command');
+        $definition->setArgument(0, $config['user_class']);
+        $definition->setArgument(1, $config['user_identifier_field']);
     }
 
 }
