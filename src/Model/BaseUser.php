@@ -22,6 +22,39 @@ abstract class BaseUser implements UserInterface
     use IpTraceableEntity;
 
     /**************************************/
+    /* Helpers                            */
+    /**************************************/
+
+    public function __toString()
+    {
+        return (string) $this->getUsername();
+    }
+
+    public function getRolesAsLabel()
+    {
+        $roles = array();
+        foreach ($this->getRoles() as $role) {
+            $tmp = explode('_', $role);
+            array_shift($tmp);
+            switch($role)
+            {
+                case 'ROLE_SUPER_ADMIN':
+                    $labelClass = 'label-danger';
+                    break;
+                case 'ROLE_ADMIN':
+                    $labelClass = 'label-warning';
+                    break;
+                default:
+                    $labelClass = 'label-default';
+                    break;
+            }
+            $roles[] = '<span class="label '.$labelClass.'">'.ucfirst(strtolower(implode(' ', $tmp))).'</span>';
+        }
+
+        return implode(' ', $roles);
+    }
+
+    /**************************************/
     /* Password                           */
     /**************************************/
 
