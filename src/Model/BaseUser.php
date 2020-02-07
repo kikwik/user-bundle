@@ -32,25 +32,38 @@ abstract class BaseUser implements UserInterface
 
     public function getRolesAsLabel()
     {
+        return $this->buildRoleString('label');
+    }
+
+    public function getRolesAsBadges()
+    {
+        return $this->buildRoleString('badge');
+    }
+
+    protected function getRoleClass($role)
+    {
+        switch($role)
+        {
+            case 'ROLE_SUPER_ADMIN':
+                return 'label-danger badge-danger';
+                break;
+            case 'ROLE_ADMIN':
+                return 'label-warning badge-warning';
+                break;
+            default:
+                return 'label-default badge-dark';
+                break;
+        }
+    }
+
+    private function buildRoleString($class = 'label')
+    {
         $roles = array();
         foreach ($this->getRoles() as $role) {
             $tmp = explode('_', $role);
             array_shift($tmp);
-            switch($role)
-            {
-                case 'ROLE_SUPER_ADMIN':
-                    $labelClass = 'label-danger';
-                    break;
-                case 'ROLE_ADMIN':
-                    $labelClass = 'label-warning';
-                    break;
-                default:
-                    $labelClass = 'label-default';
-                    break;
-            }
-            $roles[] = '<span class="label '.$labelClass.'">'.ucfirst(strtolower(implode(' ', $tmp))).'</span>';
+            $roles[] = '<span class="'.$class.' '.$this->getRoleClass($role).'">'.ucfirst(strtolower(implode(' ', $tmp))).'</span>';
         }
-
         return implode(' ', $roles);
     }
 
