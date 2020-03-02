@@ -93,7 +93,6 @@ class CreateUserCommand extends Command
 
         if(!$input->getOption('super-admin'))
         {
-
             $superAdminQuestion = new ConfirmationQuestion('Is this a super admin user?', false);
             $input->setOption('super-admin', $io->askQuestion($superAdminQuestion));
         }
@@ -107,33 +106,25 @@ class CreateUserCommand extends Command
         $password = $input->getArgument('password');
         $superadmin = $input->getOption('super-admin');
 
-        $user = $this->entityManager->getRepository($this->userClass)->findOneBy([$this->userIdentifierField => $username]);
 
-        if($user)
+        $user = new $this->userClass();
+
+        // username
+        $usernameSetter = 'set'.ucfirst($this->userIdentifierField);
+        $user->$usernameSetter($username);
+
+        // password
+        $user->setPassword($this->passwordEncoder->encodePassword($user,$password));
+
+        if($superadmin)
         {
-            $io->error('User '.$username.' already exists');
+            $user->setRoles(['ROLE_SUPER_ADMIN']);
         }
-        else
-        {
-            $user = new $this->userClass();
 
-            // username
-            $usernameSetter = 'set'.ucfirst($this->userIdentifierField);
-            $user->$usernameSetter($username);
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
 
-            // password
-            $user->setPassword($this->passwordEncoder->encodePassword($user,$password));
-
-            if($superadmin)
-            {
-                $user->setRoles(['RLE_SUPER_ADMIN']);
-            }
-
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
-
-            $io->success('User '.$username.' successfully created');
-        }
+        $io->success('User '.$username.' successfully created');
 
         return 0;
     }
