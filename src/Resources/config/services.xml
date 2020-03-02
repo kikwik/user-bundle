@@ -18,5 +18,14 @@
       <argument type="service" id="security.password_encoder"></argument>
       <tag name="console.command" command="kikwik:user:create" />
     </service>
+
+    <service id="kikwik_user.command.change_user_password_command" class="Kikwik\UserBundle\Command\ChangeUserPasswordCommand">
+      <argument>%kikwik_user.user_class%</argument>
+      <argument>%kikwik_user.user_identifier_field%</argument>
+      <argument type="service" id="doctrine.orm.entity_manager"></argument>
+      <argument type="service" id="security.password_encoder"></argument>
+      <tag name="console.command" command="kikwik:user:change-password" />
+    </service>
+
   </services>
 </container>

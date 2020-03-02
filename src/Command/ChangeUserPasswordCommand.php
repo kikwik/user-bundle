@@ -1,6 +1,8 @@
 <?php
 
+
 namespace Kikwik\UserBundle\Command;
+
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -9,12 +11,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class CreateUserCommand extends Command
+class ChangeUserPasswordCommand extends Command
 {
     /**
      * @var string
@@ -36,7 +36,6 @@ class CreateUserCommand extends Command
      */
     private $passwordEncoder;
 
-
     public function __construct(string $userClass, string $userIdentifierField, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
     {
         parent::__construct();
@@ -49,23 +48,23 @@ class CreateUserCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('kikwik:user:create')
+            ->setName('kikwik:user:change-password')
             ->setDescription('Create a user.')
             ->setDefinition(array(
                 new InputArgument('username', InputArgument::REQUIRED, 'The user unique identifier'),
-                new InputArgument('password', InputArgument::REQUIRED, 'The password'),
-                new InputOption('super-admin', null, InputOption::VALUE_NONE, 'Set the user as super admin'),
+                new InputArgument('password', InputArgument::REQUIRED, 'The new password'),
             ));
     }
 
     protected function interact(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-        $io->title('Creating a new '.$this->userClass);
+        $io->title('Change password for an existing '.$this->userClass);
+
 
         if (!$input->getArgument('username'))
         {
-            $input->setArgument('username', $io->ask('Please choose a username ('.$this->userIdentifierField.')',null,function ($value){
+            $input->setArgument('username', $io->ask('Please choose an existing username ('.$this->userIdentifierField.')',null,function ($value){
                 if (!$value) {
                     throw new \RuntimeException('Username can not be empty');
                 }
@@ -74,11 +73,10 @@ class CreateUserCommand extends Command
             }));
         }
         $user = $this->entityManager->getRepository($this->userClass)->findOneBy([$this->userIdentifierField => $input->getArgument('username')]);
-        if($user)
+        if(!$user)
         {
-            throw new \RuntimeException('User '.$input->getArgument('username').' already exists');
+            throw new \RuntimeException('User '.$input->getArgument('username').' does not exists');
         }
-
 
         if (!$input->getArgument('password'))
         {
@@ -91,52 +89,31 @@ class CreateUserCommand extends Command
             }));
         }
 
-        if(!$input->getOption('super-admin'))
-        {
-
-            $superAdminQuestion = new ConfirmationQuestion('Is this a super admin user?', false);
-            $input->setOption('super-admin', $io->askQuestion($superAdminQuestion));
-        }
     }
-
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
         $username = $input->getArgument('username');
         $password = $input->getArgument('password');
-        $superadmin = $input->getOption('super-admin');
 
         $user = $this->entityManager->getRepository($this->userClass)->findOneBy([$this->userIdentifierField => $username]);
 
-        if($user)
+        if(!$user)
         {
-            $io->error('User '.$username.' already exists');
+            $io->error('User '.$username.' does not exists');
         }
         else
         {
-            $user = new $this->userClass();
-
-            // username
-            $usernameSetter = 'set'.ucfirst($this->userIdentifierField);
-            $user->$usernameSetter($username);
-
             // password
             $user->setPassword($this->passwordEncoder->encodePassword($user,$password));
-
-            if($superadmin)
-            {
-                $user->setRoles(['RLE_SUPER_ADMIN']);
-            }
 
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
-            $io->success('User '.$username.' successfully created');
+            $io->success('Password for "'.$username.'" successfully changed');
         }
 
         return 0;
     }
-
-
 }
