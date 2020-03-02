@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
@@ -63,7 +64,8 @@ class CreateUserCommand extends Command
         $io->title('Creating a new '.$this->userClass);
         $questions = array();
 
-        if (!$input->getArgument('username')) {
+        if (!$input->getArgument('username'))
+        {
             $questions['username'] = $io->ask('Please choose a username ('.$this->userIdentifierField.')',null,function ($value){
                 if (!$value) {
                     throw new \RuntimeException('Username can not be empty');
@@ -73,7 +75,8 @@ class CreateUserCommand extends Command
             });
         }
 
-        if (!$input->getArgument('password')) {
+        if (!$input->getArgument('password'))
+        {
             $questions['password'] = $io->ask('Please choose a password',null,function ($value){
                 if (!$value) {
                     throw new \RuntimeException('Password can not be empty');
@@ -85,6 +88,14 @@ class CreateUserCommand extends Command
 
         foreach ($questions as $name => $value) {
             $input->setArgument($name, $value);
+        }
+
+
+        if(!$input->getOption('super-admin'))
+        {
+
+            $superAdminQuestion = new ConfirmationQuestion('Is this a super admin user?', false);
+            $input->setOption('super-admin', $io->askQuestion($superAdminQuestion));
         }
     }
 
