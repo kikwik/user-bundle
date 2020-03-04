@@ -19,17 +19,17 @@ class KikwikUserExtension extends Extension
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
-        $cerateUserCommand = $container->getDefinition('kikwik_user.command.create_user_command');
+        $cerateUserCommand = $container->getDefinition('kikwik_user.command.user_create_command');
         $cerateUserCommand->setArgument(0, $config['user_class']);
         $cerateUserCommand->setArgument(1, $config['user_identifier_field']);
 
-        $changeUserPasswordCommand = $container->getDefinition('kikwik_user.command.change_user_password_command');
-        $changeUserPasswordCommand->setArgument(0, $config['user_class']);
-        $changeUserPasswordCommand->setArgument(1, $config['user_identifier_field']);
+        $cerateUserCommand = $container->getDefinition('kikwik_user.command.user_delete_command');
+        $cerateUserCommand->setArgument(0, $config['user_class']);
+        $cerateUserCommand->setArgument(1, $config['user_identifier_field']);
 
-        $changeUserRolesCommand = $container->getDefinition('kikwik_user.command.change_user_roles_command');
-        $changeUserRolesCommand->setArgument(0, $config['user_class']);
-        $changeUserRolesCommand->setArgument(1, $config['user_identifier_field']);
+        $cerateUserCommand = $container->getDefinition('kikwik_user.command.user_edit_command');
+        $cerateUserCommand->setArgument(0, $config['user_class']);
+        $cerateUserCommand->setArgument(1, $config['user_identifier_field']);
     }
 
 }

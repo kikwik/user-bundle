@@ -3,34 +3,16 @@
 namespace Kikwik\UserBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class CreateUserCommand extends Command
+class UserCreateCommand extends BaseCommand
 {
-    /**
-     * @var string
-     */
-    private $userClass;
-
-    /**
-     * @var string
-     */
-    private $userIdentifierField;
-
-    /**
-     * @var \Doctrine\ORM\EntityManagerInterface
-     */
-    private $entityManager;
-
     /**
      * @var \Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface
      */
@@ -39,10 +21,7 @@ class CreateUserCommand extends Command
 
     public function __construct(string $userClass, string $userIdentifierField, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
     {
-        parent::__construct();
-        $this->userClass = $userClass;
-        $this->entityManager = $entityManager;
-        $this->userIdentifierField = $userIdentifierField;
+        parent::__construct($userClass, $userIdentifierField, $entityManager);
         $this->passwordEncoder = $passwordEncoder;
     }
 
@@ -63,33 +42,8 @@ class CreateUserCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title('Creating a new '.$this->userClass);
 
-        if (!$input->getArgument('username'))
-        {
-            $input->setArgument('username', $io->ask('Please choose a username ('.$this->userIdentifierField.')',null,function ($value){
-                if (!$value) {
-                    throw new \RuntimeException('Username can not be empty');
-                }
-
-                return (string) $value;
-            }));
-        }
-        $user = $this->entityManager->getRepository($this->userClass)->findOneBy([$this->userIdentifierField => $input->getArgument('username')]);
-        if($user)
-        {
-            throw new \RuntimeException('User '.$input->getArgument('username').' already exists');
-        }
-
-
-        if (!$input->getArgument('password'))
-        {
-            $input->setArgument('password', $io->ask('Please choose a password',null,function ($value){
-                if (!$value) {
-                    throw new \RuntimeException('Password can not be empty');
-                }
-
-                return (string) $value;
-            }));
-        }
+        $this->askForUsernameArgument($input, $output, false);
+        $this->askForPasswordArgument($input, $output, false);
 
         if(!$input->getOption('super-admin'))
         {
@@ -116,6 +70,7 @@ class CreateUserCommand extends Command
         // password
         $user->setPassword($this->passwordEncoder->encodePassword($user,$password));
 
+        // super-admin
         if($superadmin)
         {
             $user->setRoles(['ROLE_SUPER_ADMIN']);

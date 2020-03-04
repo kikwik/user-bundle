@@ -11,7 +11,7 @@
     </service>
 
 
-    <service id="kikwik_user.command.create_user_command" class="Kikwik\UserBundle\Command\CreateUserCommand">
+    <service id="kikwik_user.command.user_create_command" class="Kikwik\UserBundle\Command\UserCreateCommand">
       <argument>%kikwik_user.user_class%</argument>
       <argument>%kikwik_user.user_identifier_field%</argument>
       <argument type="service" id="doctrine.orm.entity_manager"></argument>
@@ -19,20 +19,21 @@
       <tag name="console.command" command="kikwik:user:create" />
     </service>
 
-    <service id="kikwik_user.command.change_user_password_command" class="Kikwik\UserBundle\Command\ChangeUserPasswordCommand">
+    <service id="kikwik_user.command.user_delete_command" class="Kikwik\UserBundle\Command\UserDeleteCommand">
+      <argument>%kikwik_user.user_class%</argument>
+      <argument>%kikwik_user.user_identifier_field%</argument>
+      <argument type="service" id="doctrine.orm.entity_manager"></argument>
+      <tag name="console.command" command="kikwik:user:delete" />
+    </service>
+
+    <service id="kikwik_user.command.user_edit_command" class="Kikwik\UserBundle\Command\UserEditCommand">
       <argument>%kikwik_user.user_class%</argument>
       <argument>%kikwik_user.user_identifier_field%</argument>
       <argument type="service" id="doctrine.orm.entity_manager"></argument>
       <argument type="service" id="security.password_encoder"></argument>
-      <tag name="console.command" command="kikwik:user:change-password" />
+      <tag name="console.command" command="kikwik:user:edit" />
     </service>
 
-    <service id="kikwik_user.command.change_user_roles_command" class="Kikwik\UserBundle\Command\ChangeUserRolesCommand">
-      <argument>%kikwik_user.user_class%</argument>
-      <argument>%kikwik_user.user_identifier_field%</argument>
-      <argument type="service" id="doctrine.orm.entity_manager"></argument>
-      <tag name="console.command" command="kikwik:user:change-roles" />
-    </service>
 
   </services>
 </container>
