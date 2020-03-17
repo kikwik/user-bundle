@@ -28,9 +28,10 @@ trait SonataUserAdminTrait
         $this->changePassword($object);
     }
 
-    protected function getRoleHierarchy()
+    protected function getRoleHierarchy(): array
     {
         $container = $this->getConfigurationPool()->getContainer();
         $roles = $container->getParameter('security.role_hierarchy.roles');
+        return $roles;
     }
 }
