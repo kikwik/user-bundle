@@ -91,7 +91,7 @@ security:
             user_checker: Kikwik\UserBundle\Security\UserChecker
 ```
 
-If Sonata Admin is installed you can use the helpers in `SonataUserAdminTrait`
+If Sonata Admin is installed you can use some helpers (change password handler and getRoleHierarchy) from `SonataUserAdminTrait`
 
 ```php
 use Kikwik\UserBundle\Traits\SonataUserAdminTrait;

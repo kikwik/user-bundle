@@ -9,7 +9,7 @@ class AccountDisabledException extends AccountStatusException
 {
     public function getMessageKey()
     {
-        return 'User access is disabled.';
+        return 'Your account is disabled.';
     }
 
 }
