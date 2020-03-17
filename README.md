@@ -90,3 +90,16 @@ security:
             pattern: ^/
             user_checker: Kikwik\UserBundle\Security\UserChecker
 ```
+
+If Sonata Admin is installed you can use the helpers in `SonataUserAdminTrait`
+
+```php
+use Kikwik\UserBundle\Traits\SonataUserAdminTrait;
+
+final class UserAdmin extends AbstractAdmin
+{
+    use SonataUserAdminTrait;
+
+    //...
+}
+```
