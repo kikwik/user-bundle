@@ -36,6 +36,7 @@ class UserEditCommand extends BaseCommand
                 new InputArgument('username', InputArgument::REQUIRED, 'The user unique identifier'),
                 new InputOption('roles', null, InputOption::VALUE_OPTIONAL, 'The new roles (optional, comma separated)'),
                 new InputOption('password', null, InputOption::VALUE_OPTIONAL, 'The new password (optional)'),
+                new InputOption('isEnabled',null,InputOption::VALUE_OPTIONAL, 'Access enabled or not',true),
             ));
     }
 
@@ -47,6 +48,8 @@ class UserEditCommand extends BaseCommand
         $this->askForUsernameArgument($input, $output, true);
         $this->askForRolesOption($input, $output);
         $this->askForPasswordOption($input, $output);
+        $user = $this->entityManager->getRepository($this->userClass)->findOneBy([$this->userIdentifierField => $input->getArgument('username')]);
+        $this->askForIsEnabledOption($input, $output, $user->isEnabled());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -55,6 +58,7 @@ class UserEditCommand extends BaseCommand
         $username = $input->getArgument('username');
         $newPassword = $input->getOption('password');
         $newRoles = $input->getOption('roles');
+        $isEnabled = $input->getOption('isEnabled');
 
         $user = $this->entityManager->getRepository($this->userClass)->findOneBy([$this->userIdentifierField => $username]);
 
@@ -70,9 +74,13 @@ class UserEditCommand extends BaseCommand
             $user->setRoles($roles);
         }
 
+        $user->setIsEnabled($isEnabled);
+
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
         $io->success('User '.$username.' successfully edited'."\n".'roles: '.implode(', ',$user->getRoles()));
+
+        return 0;
     }
 }

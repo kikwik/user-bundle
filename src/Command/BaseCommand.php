@@ -95,6 +95,12 @@ abstract class BaseCommand extends Command
 
         $user = $this->entityManager->getRepository($this->userClass)->findOneBy([$this->userIdentifierField => $input->getArgument('username')]);
 
-        $input->setOption('roles',$io->ask('Please enter the new user roles (comma separated, enter ROLE_USER to delete all extra roles)',implode(', ',$user->getRoles())));
+        $input->setOption('roles',$io->ask('Please enter the new user roles'."\n".' * leave blank if you don\'t want to change it'."\n".' * enter a comma separated list'."\n".' * enter ROLE_USER to delete all extra roles'."\n",implode(', ',$user->getRoles())));
+    }
+
+    protected function askForIsEnabledOption(InputInterface $input, OutputInterface $output, $default)
+    {
+        $io = new SymfonyStyle($input, $output);
+        $input->setOption('isEnabled',$io->confirm('user access is enabled?',$default));
     }
 }

@@ -168,4 +168,29 @@ abstract class BaseUser implements UserInterface
         $this->loginCount++;
     }
 
+    /**************************************/
+    /* isEnabled                          */
+    /**************************************/
+
+    /**
+     * @return bool
+     * @ORM\Column(type="boolean", options={"default":"1"})
+     */
+    protected $isEnabled = true;
+
+    /**
+     * @return bool
+     */
+    public function isEnabled(): bool {
+        return $this->isEnabled;
+    }
+
+    /**
+     * @param bool $isEnabled
+     * @return BaseUser
+     */
+    public function setIsEnabled(bool $isEnabled): BaseUser {
+        $this->isEnabled = $isEnabled;
+        return $this;
+    }
 }

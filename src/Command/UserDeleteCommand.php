@@ -51,5 +51,7 @@ class UserDeleteCommand extends BaseCommand
         {
             $io->warning('User '.$username.' was NOT deleted');
         }
+
+        return 0;
     }
 }

@@ -80,3 +80,13 @@ stof_doctrine_extensions:
             timestampable: true
             blameable: true
 ```
+
+To activate the isEnabled feature set the user_checker option for your firewall in `config/packages/security.yaml`
+
+```yaml
+security:
+    firewalls:
+        main:
+            pattern: ^/
+            user_checker: Kikwik\UserBundle\Security\UserChecker
+```
