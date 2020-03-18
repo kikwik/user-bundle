@@ -15,12 +15,21 @@
     <service id="kikwik_user.security.user_checker" class="Kikwik\UserBundle\Security\UserChecker"/>
     <service id="Kikwik\UserBundle\Security\UserChecker" alias="kikwik_user.security.user_checker"/>
 
+    <!-- PasswordController -->
+    <service id="kikwik_user.controller.password_controller" class="Kikwik\UserBundle\Controller\PasswordController" public="true">
+      <argument>%kikwik_user.user_class%</argument>
+      <argument>%kikwik_user.user_identifier_field%</argument>
+      <argument type="service" id="doctrine.orm.entity_manager" />
+      <argument type="service" id="security.password_encoder" />
+      <argument type="service" id="translator" />
+    </service>
+
     <!-- UserCreateCommand -->
     <service id="kikwik_user.command.user_create_command" class="Kikwik\UserBundle\Command\UserCreateCommand">
       <argument>%kikwik_user.user_class%</argument>
       <argument>%kikwik_user.user_identifier_field%</argument>
-      <argument type="service" id="doctrine.orm.entity_manager"></argument>
-      <argument type="service" id="security.password_encoder"></argument>
+      <argument type="service" id="doctrine.orm.entity_manager" />
+      <argument type="service" id="security.password_encoder" />
       <tag name="console.command" command="kikwik:user:create" />
     </service>
 
@@ -28,7 +37,7 @@
     <service id="kikwik_user.command.user_delete_command" class="Kikwik\UserBundle\Command\UserDeleteCommand">
       <argument>%kikwik_user.user_class%</argument>
       <argument>%kikwik_user.user_identifier_field%</argument>
-      <argument type="service" id="doctrine.orm.entity_manager"></argument>
+      <argument type="service" id="doctrine.orm.entity_manager" />
       <tag name="console.command" command="kikwik:user:delete" />
     </service>
 
@@ -36,8 +45,8 @@
     <service id="kikwik_user.command.user_edit_command" class="Kikwik\UserBundle\Command\UserEditCommand">
       <argument>%kikwik_user.user_class%</argument>
       <argument>%kikwik_user.user_identifier_field%</argument>
-      <argument type="service" id="doctrine.orm.entity_manager"></argument>
-      <argument type="service" id="security.password_encoder"></argument>
+      <argument type="service" id="doctrine.orm.entity_manager" />
+      <argument type="service" id="security.password_encoder" />
       <tag name="console.command" command="kikwik:user:edit" />
     </service>
 

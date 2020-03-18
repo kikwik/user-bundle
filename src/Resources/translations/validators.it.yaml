@@ -1,0 +1,9 @@
+kikwik_user:
+    password:
+        blank: 'Inserisci una password.'
+        short: 'Password troppo breve.'
+        mismatch: 'Le due password non coincidono.'
+    new_password:
+        blank: 'Inserire una nuova password.'
+        short: 'Nuova password troppo breve.'
+        mismatch: 'Le due password non coincidono.'

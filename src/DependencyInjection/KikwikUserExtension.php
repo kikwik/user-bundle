@@ -19,6 +19,10 @@ class KikwikUserExtension extends Extension
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
+        $passwordController = $container->getDefinition('kikwik_user.controller.password_controller');
+        $passwordController->setArgument(0, $config['user_class']);
+        $passwordController->setArgument(1, $config['user_identifier_field']);
+
         $cerateUserCommand = $container->getDefinition('kikwik_user.command.user_create_command');
         $cerateUserCommand->setArgument(0, $config['user_class']);
         $cerateUserCommand->setArgument(1, $config['user_identifier_field']);

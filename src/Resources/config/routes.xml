@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<routes xmlns="http://symfony.com/schema/routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing
+        https://symfony.com/schema/routing/routing-1.0.xsd">
+
+  <route
+      id="kikwik_user_bundle_password_change"
+      path="/change"
+      controller="kikwik_user.controller.password_controller:changePassword"
+      methods="GET,POST"
+  />
+
+  <route
+      id="kikwik_user_bundle_password_request"
+      path="/request"
+      controller="kikwik_user.controller.password_controller:requestPassword"
+      methods="GET,POST"
+  />
+
+  <route
+      id="kikwik_user_bundle_password_reset"
+      path="/reset/{passwordChangeCode}"
+      controller="kikwik_user.controller.password_controller:resetPassword"
+      methods="GET,POST"
+  />
+</routes>
