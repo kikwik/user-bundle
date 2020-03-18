@@ -7,6 +7,7 @@ use Kikwik\UserBundle\Form\ChangePasswordFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -32,9 +33,14 @@ class PasswordController extends AbstractController
         $this->translator = $translator;
     }
 
-    public function changePassword(Request $request)
+    public function changePassword(Request $request, SessionInterface $session)
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
+
+        if(!$session->has('kikwik_user.change_password.referer'))
+        {
+            $session->set('kikwik_user.change_password.referer', $request->headers->get('referer'));
+        }
 
         $form = $this->createForm(ChangePasswordFormType::class);
 
@@ -51,8 +57,8 @@ class PasswordController extends AbstractController
             $this->entityManager->flush();
 
             $this->addFlash('success',$this->translator->trans('change_password.flash.success',[],'KikwikUserBundle'));
-            $url = $this->generateUrl('kikwik_user_password_change');
-            return new RedirectResponse($url);
+            $returnUrl = $session->get('kikwik_user.change_password.referer',$this->generateUrl('kikwik_user_password_change'));
+            return new RedirectResponse($returnUrl);
         }
 
         return $this->render('@KikwikUser/changePassword.html.twig', [

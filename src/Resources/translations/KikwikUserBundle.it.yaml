@@ -1,6 +1,8 @@
 change_password:
     title: 'Cambia password'
-    submit: 'Cambia password'
+    description: 'Inserisci una nuova password per il tuo account:'
+    submit: '<i class="far fa-save"></i> Cambia password'
+    back: '<i class="fas fa-long-arrow-alt-left"></i> Annulla'
     flash:
         success: 'La password è stata cambiata.'
 form:
