@@ -67,7 +67,7 @@ Create the `config/packages/kikwik_user.yaml` config file, set the user class an
 ```yaml
 kikwik_user:
     user_class: App\Entity\User
-    user_identifier_field: email
+    user_identifier_field: username
     user_email_field: email
 ```
 
