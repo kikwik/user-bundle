@@ -81,6 +81,9 @@ stof_doctrine_extensions:
             blameable: true
 ```
 
+Features
+------------
+
 ### Disable user access ###
 
 To activate the isEnabled feature set the user_checker option for your firewall in `config/packages/security.yaml`
@@ -95,13 +98,19 @@ security:
 
 ### Change password ###
 
-To activate the forgot password feature add routes in `config/routes.yaml`:
+To activate the change and forgot password feature add routes in `config/routes.yaml`:
 
 ```yaml
 kikwik_user_bundle_password:
     resource: '@KikwikUserBundle/Resources/config/routes.xml'
     prefix: '/password'
 ```
+
+This will register the following route:
+
+    * kikwik_user_password_change
+    * kikwik_user_password_request
+    * kikwik_user_password_reset
 
 ### Sonata admin ###
 

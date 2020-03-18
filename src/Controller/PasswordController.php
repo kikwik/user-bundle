@@ -51,7 +51,7 @@ class PasswordController extends AbstractController
             $this->entityManager->flush();
 
             $this->addFlash('success',$this->translator->trans('change_password.flash.success',[],'KikwikUserBundle'));
-            $url = $this->generateUrl('kikwik_user_bundle_password_change');
+            $url = $this->generateUrl('kikwik_user_password_change');
             return new RedirectResponse($url);
         }
 
