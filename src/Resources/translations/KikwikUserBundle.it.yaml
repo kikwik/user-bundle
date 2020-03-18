@@ -30,6 +30,7 @@ request_password:
                 Ciao {{ username }},<br/>
                 Abbiamo ricevuto una richiesta per resettare la tua password<br/>
                 <a href="{{ reset_url }}">clicca qui per scegliere una nuova password</a><br/>
+                oppure incolla in seguente link nella barra degli indirizzi del browser: <br/>{{ reset_url }}
             </p>
 
 reset_password:

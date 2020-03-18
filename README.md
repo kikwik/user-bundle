@@ -110,7 +110,7 @@ kikwik_user_bundle_password:
 The forgot password uses symfony/mailer component, so you must configure it in `.env`
 
 ```
-MAILER_DSN=smtp://user:pass@smtp.example.com 
+MAILER_DSN=sendmail+smtp://localhost
 ```
 
 This will register the following route:
@@ -119,6 +119,8 @@ This will register the following route:
     * kikwik_user_password_request
     * kikwik_user_password_reset
 
+Copy translations file from `vendor/kikwik/user-bundle/src/Resources/translations/KikwikUserBundle.it.yaml` 
+to `translations/KikwikUserBundle.it.yaml` and change at least the `request_password.email.sender` value 
 
 
 ### Sonata admin ###
