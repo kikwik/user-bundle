@@ -20,7 +20,7 @@
 
   <route
       id="kikwik_user_password_reset"
-      path="/reset/{passwordChangeCode}"
+      path="/reset/{userIdentifier}/{secretCode}"
       controller="kikwik_user.controller.password_controller:resetPassword"
       methods="GET,POST"
   />

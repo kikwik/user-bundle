@@ -87,6 +87,21 @@ abstract class BaseUser implements UserInterface
     protected $passwordChangedAt;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $changePasswordSecret;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="change", field={"changePasswordSecret"})
+     */
+    protected $changePasswordRequestedAt;
+
+    /**
      * @return string
      */
     public function getPlainPassword(): ?string {
@@ -110,13 +125,29 @@ abstract class BaseUser implements UserInterface
     }
 
     /**
-     * @param \DateTime|null $passwordChangedAt
-     * @return BaseUser
+     * @return string|null
      */
-    public function setPasswordChangedAt(?\DateTime $passwordChangedAt): BaseUser {
-        $this->passwordChangedAt = $passwordChangedAt;
-        return $this;
+    public function getChangePasswordSecret(): ?string {
+        return $this->changePasswordSecret;
     }
+
+    /**
+     * @return string
+     */
+    public function generateChangePasswordSecret(): string {
+        if(is_null($this->changePasswordRequestedAt) || $this->changePasswordRequestedAt < new \DateTime('-1 day'))
+        {
+            $this->changePasswordSecret = md5(uniqid(rand(), true));
+        }
+        return $this->changePasswordSecret;
+    }
+
+    public function removeChangePasswordSecret()
+    {
+        $this->changePasswordSecret = null;
+        $this->changePasswordRequestedAt = null;
+    }
+
 
     /**************************************/
     /* login                              */

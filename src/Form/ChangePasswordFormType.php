@@ -16,10 +16,10 @@ class ChangePasswordFormType extends AbstractType
         $builder
             ->add('newPassword', RepeatedType::class, array(
                 'type' => PasswordType::class,
-                'required' => false,
+                'required' => true,
                 'invalid_message' => 'kikwik_user.new_password.mismatch',
-                'first_options' => ['label' => 'form.new_password', 'attr' => ['autocomplete' => 'off']],
-                'second_options' => ['label' => 'form.new_password_confirmation'],
+                'first_options' => ['label' => 'change_password.form.new_password', 'attr' => ['autocomplete' => 'off']],
+                'second_options' => ['label' => 'change_password.form.new_password_confirmation'],
                 'constraints' => [ new NotBlank(['message'=>'kikwik_user.new_password.blank'])]
             ));
     }

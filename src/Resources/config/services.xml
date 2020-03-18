@@ -19,9 +19,11 @@
     <service id="kikwik_user.controller.password_controller" class="Kikwik\UserBundle\Controller\PasswordController" public="true">
       <argument>%kikwik_user.user_class%</argument>
       <argument>%kikwik_user.user_identifier_field%</argument>
+      <argument>%kikwik_user.user_email_field%</argument>
       <argument type="service" id="doctrine.orm.entity_manager" />
       <argument type="service" id="security.password_encoder" />
       <argument type="service" id="translator" />
+      <argument type="service" id="mailer.mailer" />
     </service>
 
     <!-- UserCreateCommand -->

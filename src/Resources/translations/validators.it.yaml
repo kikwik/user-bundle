@@ -7,3 +7,5 @@ kikwik_user:
         blank: 'Inserire una nuova password.'
         short: 'Nuova password troppo breve.'
         mismatch: 'Le due password non coincidono.'
+    userIdentifier:
+        blank: 'Inserisci il tuo identificativo utente.'

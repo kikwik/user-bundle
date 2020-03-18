@@ -1,15 +1,42 @@
 change_password:
-    title: 'Cambia password'
-    description: 'Inserisci una nuova password per il tuo account:'
-    submit: '<i class="far fa-save"></i> Cambia password'
-    back: '<i class="fas fa-long-arrow-alt-left"></i> Annulla'
+    title:          'Cambia password'
+    description:    'Inserisci una nuova password per il tuo account:'
+    back:           '<i class="fas fa-long-arrow-alt-left"></i> Annulla'
+    submit:         '<i class="far fa-save"></i> Cambia password'
     flash:
-        success: 'La password è stata cambiata.'
-form:
-    username: Username
-    email: Email
-    current_password: 'Password corrente'
-    password: Password
-    password_confirmation: 'Ripeti password'
-    new_password: 'Nuova password'
-    new_password_confirmation: 'Ripeti la nuova password'
+        success:    'La password è stata cambiata.'
+    form:
+        new_password:               'Nuova password'
+        new_password_confirmation:  'Ripeti la nuova password'
+
+request_password:
+    title:          'Password dimenticata'
+    description:    'Inserisci il tuo nome utente, riceverai una mail con le istruzioni per reimpostare la tua password.'
+    back:           '<i class="fas fa-long-arrow-alt-left"></i> Annulla'
+    submit:         '<i class="far fa-save"></i> Richiedi'
+    flash:
+        success:                        'Ti abbiamo inviato una mail con le istruzioni per reimpostare la tua password.'
+        danger_no_user:                 'Utente non trovato.'
+        danger_no_email:                'Indirizzo email non trovato.'
+        danger_no_email_configuration:  'Indirizzo email non configurato.'
+        danger_email_not_valid:         'L''indirizzo mail associato al tuo account non è valido.'
+    form:
+        userIdentifier: 'Identificativo utente'
+    email:
+        sender: 'no-reply@example.com'
+        subject: 'Istruzioni per il reset della password'
+        content: |
+            <p>
+                Ciao {{ username }},<br/>
+                Abbiamo ricevuto una richiesta per resettare la tua password<br/>
+                <a href="{{ reset_url }}">clicca qui per scegliere una nuova password</a><br/>
+            </p>
+
+reset_password:
+    title:          'Reimposta password'
+    description:    'Inserisci una nuova password per il tuo account:'
+    invalid:        'Questo link è scaduto o errato'
+    back:           '<i class="fas fa-long-arrow-alt-left"></i> Annulla'
+    submit:         '<i class="far fa-save"></i> Reimposta password'
+    flash:
+        success: 'La tua password è stata aggiornata.'

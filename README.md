@@ -68,6 +68,7 @@ Create the `config/packages/kikwik_user.yaml` config file, set the user class an
 kikwik_user:
     user_class: App\Entity\User
     user_identifier_field: email
+    user_email_field: email
 ```
 
 Enable timestampable and blameable doctrine extension in `config/packages/stof_doctrine_extensions.yaml`
@@ -106,11 +107,19 @@ kikwik_user_bundle_password:
     prefix: '/password'
 ```
 
+The forgot password uses symfony/mailer component, so you must configure it in `.env`
+
+```
+MAILER_DSN=smtp://user:pass@smtp.example.com 
+```
+
 This will register the following route:
 
     * kikwik_user_password_change
     * kikwik_user_password_request
     * kikwik_user_password_reset
+
+
 
 ### Sonata admin ###
 

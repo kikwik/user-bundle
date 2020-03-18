@@ -1,15 +1,42 @@
 change_password:
     title: 'Change password'
     description: 'Enter a new password for your account:'
-    submit: '<i class="far fa-save"></i> Change password'
     back: '<i class="fas fa-long-arrow-alt-left"></i> Cancel'
+    submit: '<i class="far fa-save"></i> Change password'
     flash:
         success: 'The password has been changed.'
-form:
-    username: Username
-    email: Email
-    current_password: 'Current password'
-    password: Password
-    password_confirmation: 'Repeat password'
-    new_password: 'New password'
-    new_password_confirmation: 'Repeat new password'
+    form:
+        new_password: 'New password'
+        new_password_confirmation: 'Repeat new password'
+
+request_password:
+    title: 'Forgotten password'
+    description: 'Enter your username, you will receive an email with instructions to reset your password.'
+    back: '<i class="fas fa-long-arrow-alt-left"></i> Cancel'
+    submit: '<i class="far fa-save"></i> Request'
+    flash:
+        success: 'We have sent you an email with instructions to reset your password.'
+        danger_no_user: 'User not found.'
+        danger_no_email: 'Email address not found.'
+        danger_no_email_configuration: 'Email address not configured.'
+        danger_email_not_valid: 'The email address associated with your account is not valid.'
+    form:
+        userIdentifier: 'User identifier'
+    email:
+        sender: 'no-reply@example.com'
+        subject: 'Reset password instructions'
+        content: |
+            <p>
+                Hello {{ username }},<br/>
+                We received a request for resetting your password<br/>
+                <a href="{{ reset_url }}">Click here to choose a new password</a>
+            </p>
+
+reset_password:
+    title:          'Reset password'
+    description:    'Enter a new password for your account:'
+    invalid:        'This link is expired or invalid.'
+    back:           '<i class="fas fa-long-arrow-alt-left"></i> Cancel'
+    submit:         '<i class="far fa-save"></i> Reset password'
+    flash:
+        success: 'Your password has been updated.'
