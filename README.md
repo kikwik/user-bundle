@@ -117,3 +117,11 @@ final class UserAdmin extends AbstractAdmin
     //...
 }
 ```
+
+Update sonata config files `config/packages/sonata_admin.yaml` to use some templates:
+
+```yaml
+sonata_admin:
+    templates:
+        user_block: '@KikwikUser/SonataAdmin/Core/user_block.html.twig'
+```

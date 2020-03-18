@@ -1,0 +1,22 @@
+{% block user_block %}
+    {% if app.user %}
+
+        <li class="user-header bg-light-blue">
+            <img src="{{ asset('bundles/kikwikuser/images/user.png') }}" class="img-circle" alt="Avatar">
+            <p>{{ app.user }}</p>
+        </li>
+
+
+        <li class="user-footer">
+            {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                <div class="pull-left">
+                    <a href="{{ url('sonata_admin_dashboard', {'_switch_user': '_exit'}) }}" class="btn btn-default btn-flat"><i class="fa fa-user"></i> Ritorna te stesso</a>
+                </div>
+            {% endif %}
+
+            <div class="pull-right">
+                <a href="{{ url('app_logout') }}" class="btn btn-default btn-flat"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+            </div>
+        </li>
+    {% endif %}
+{% endblock %}
