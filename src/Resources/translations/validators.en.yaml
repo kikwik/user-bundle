@@ -1,11 +1,11 @@
 kikwik_user:
     password:
-        blank: 'Please enter a password.'
-        short: 'The password is too short.'
-        mismatch: 'The entered passwords don''t match.'
+        blank: 'The password cannot be empty.'
+        short: 'The password you have chosen is too short (min. %min% characters).'
+        mismatch: 'The two passwords do not match.'
     new_password:
-        blank: 'Please enter a new password.'
-        short: 'The new password is too short.'
-        mismatch: 'The entered passwords don''t match.'
+        blank: 'The password cannot be empty.'
+        short: 'The password you have chosen is too short (min. %min% characters).'
+        mismatch: 'The two passwords do not match.'
     userIdentifier:
-        blank: 'Please enter your user identifier.'
+        blank: 'Username cannot be empty.'

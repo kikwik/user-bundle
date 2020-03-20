@@ -1,11 +1,11 @@
 kikwik_user:
     password:
-        blank: 'Inserisci una password.'
-        short: 'Password troppo breve.'
+        blank: 'La password non può essere vuota.'
+        short: 'La password che hai scelto è troppo breve (min. %min% caratteri).'
         mismatch: 'Le due password non coincidono.'
     new_password:
-        blank: 'Inserire una nuova password.'
-        short: 'Nuova password troppo breve.'
+        blank: 'La password non può essere vuota.'
+        short: 'La password che hai scelto è troppo breve (min. %min% caratteri).'
         mismatch: 'Le due password non coincidono.'
     userIdentifier:
-        blank: 'Inserisci il tuo identificativo utente.'
+        blank: 'Il nome utente non può essere vuoto.'

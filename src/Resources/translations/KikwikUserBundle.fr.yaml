@@ -1,0 +1,43 @@
+change_password:
+    title: 'Changer le mot de passe'
+    description: 'Entrez un nouveau mot de passe pour votre compte:'
+    back: '<i class="fas fa-long-arrow-alt-left"></i> Annulation'
+    submit: '<i class="far fa-save"></i> Change'
+    flash:
+        success: 'Le mot de passe a été changé.'
+    form:
+        new_password: 'Nouveau mot de passe'
+        new_password_confirmation: 'Répétez le nouveau mot de passe'
+
+request_password:
+    title: 'Mot de passe oublié'
+    description: 'Entrez votre nom d''utilisateur, vous recevrez un e-mail avec des instructions pour changer votre mot de passe.'
+    back: '<i class="fas fa-long-arrow-alt-left"></i> Annulation'
+    submit: '<i class="far fa-save"></i> Demande'
+    flash:
+        success: 'Nous vous avons envoyé un e-mail avec des instructions sur comment changer votre mot de passe.'
+        danger_no_user: 'Utilisateur introuvable.'
+        danger_no_email: 'Adresse e-mail introuvable.'
+        danger_no_email_configuration: 'Adresse e-mail non configurée.'
+        danger_email_not_valid: 'L''adresse e-mail associée à votre compte n''est pas valide.'
+    form:
+        userIdentifier: 'Identification'
+    email:
+        sender: 'no-reply@example.com'
+        subject: 'ìInstructions pour changer le mot de passe'
+        content: |
+            <p>
+                Bonjour {{ username }},<br/>
+                Nous avons reçu une demande de modification  de votre mot de passe,
+                <a href="{{ reset_url }}">cliquez ici pour choisir un nouveau mot de passe</a>
+                ou collez le lien suivant dans la barre d'adresse du navigateur: <br/>{{ reset_url }}
+            </p>
+
+reset_password:
+    title:          'Changer le mot de passe'
+    description:    'Entrez un nouveau mot de passe pour votre compte:'
+    invalid:        'Ce lien a expiré ou est incorrect.'
+    back:           '<i class="fas fa-long-arrow-alt-left"></i> Annulation'
+    submit:         '<i class="far fa-save"></i> Change'
+    flash:
+        success: 'Votre mot de passe a été mis à jour.'

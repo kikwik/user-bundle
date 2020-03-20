@@ -1,0 +1,43 @@
+change_password:
+    title: 'Passwort ändern'
+    description: 'Geben Sie ein neues Passwort für Ihr Konto ein:'
+    back: '<i class="fas fa-long-arrow-alt-left"></i> Stornieren'
+    submit: '<i class="far fa-save"></i> Ändern'
+    flash:
+        success: 'Das Passwort wurde geändert.'
+    form:
+        new_password: 'Neues Kennwort'
+        new_password_confirmation: 'Wiederholen Sie das neue Passwort'
+
+request_password:
+    title: 'Passwort vergessen'
+    description: 'Geben Sie Ihren Benutzernamen ein. Sie erhalten eine E-Mail mit Anweisungen zum Ändern Ihres Passworts.'
+    back: '<i class="fas fa-long-arrow-alt-left"></i> Stornieren'
+    submit: '<i class="far fa-save"></i> Anforderung'
+    flash:
+        success: 'Wir haben Ihnen eine E-Mail mit Anweisungen zum Ändern Ihres Passworts gesendet.'
+        danger_no_user: 'Benutzer nicht gefunden.'
+        danger_no_email: 'Emailadresse wurde nicht gefunden.'
+        danger_no_email_configuration: 'E-Mail-Adresse nicht konfiguriert.'
+        danger_email_not_valid: 'Die Ihrem Konto zugeordnete E-Mail-Adresse ist ungültig.'
+    form:
+        userIdentifier: 'Nutzername'
+    email:
+        sender: 'no-reply@example.com'
+        subject: 'Anweisungen zum Ändern des Passworts'
+        content: |
+            <p>
+                Hallo {{ username }},<br/>
+                Wir haben eine Anfrage zur Änderung Ihres Passworts erhalten,
+                <a href="{{ reset_url }}">klicken Sie hier, um ein neues Passwort zu wählen</a>
+                oder fügen Sie den folgenden Link in die Adressleiste des Browsers ein: <br/>{{ reset_url }}
+            </p>
+
+reset_password:
+    title:          'Passwort ändern'
+    description:    'Geben Sie ein neues Passwort für Ihr Konto ein:'
+    invalid:        'Dieser Link ist abgelaufen oder falsch.'
+    back:           '<i class="fas fa-long-arrow-alt-left"></i> Stornieren'
+    submit:         '<i class="far fa-save"></i> Zurücksetzen'
+    flash:
+        success: 'Ihr Passwort wurde aktualisiert.'

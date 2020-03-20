@@ -119,9 +119,22 @@ This will register the following route:
     * kikwik_user_password_request
     * kikwik_user_password_reset
 
-Copy translations file from `vendor/kikwik/user-bundle/src/Resources/translations/KikwikUserBundle.it.yaml` 
-to `translations/KikwikUserBundle.it.yaml` and change at least the `request_password.email.sender` value 
+Copy translations file from `vendor/kikwik/user-bundle/src/Resources/translations/KikwikUserBundle.xx.yaml` 
+to `translations/KikwikUserBundle.xx.yaml` and change at least the `request_password.email.sender` value 
 
+```yaml
+request_password:
+    email:
+        sender:  'no-reply@my-domain.ltd'
+        subject: 'Istruzioni per reimpostare la password'
+        content: |
+            <p>
+                Ciao {{ username }},<br/>
+                Abbiamo ricevuto una richiesta per resettare la tua password,
+                <a href="{{ reset_url }}">clicca qui per scegliere una nuova password</a><br/>
+                oppure incolla in seguente link nella barra degli indirizzi del browser: <br/>{{ reset_url }}
+            </p>
+```
 
 ### Sonata admin ###
 

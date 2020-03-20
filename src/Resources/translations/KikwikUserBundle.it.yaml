@@ -2,7 +2,7 @@ change_password:
     title:          'Cambia password'
     description:    'Inserisci una nuova password per il tuo account:'
     back:           '<i class="fas fa-long-arrow-alt-left"></i> Annulla'
-    submit:         '<i class="far fa-save"></i> Cambia password'
+    submit:         '<i class="far fa-save"></i> Cambia'
     flash:
         success:    'La password è stata cambiata.'
     form:
@@ -21,14 +21,14 @@ request_password:
         danger_no_email_configuration:  'Indirizzo email non configurato.'
         danger_email_not_valid:         'L''indirizzo mail associato al tuo account non è valido.'
     form:
-        userIdentifier: 'Identificativo utente'
+        userIdentifier: 'Nome utente'
     email:
-        sender: 'no-reply@example.com'
-        subject: 'Istruzioni per il reset della password'
+        sender:  'no-reply@example.com'
+        subject: 'Istruzioni per reimpostare la password'
         content: |
             <p>
                 Ciao {{ username }},<br/>
-                Abbiamo ricevuto una richiesta per resettare la tua password<br/>
+                Abbiamo ricevuto una richiesta per resettare la tua password,
                 <a href="{{ reset_url }}">clicca qui per scegliere una nuova password</a><br/>
                 oppure incolla in seguente link nella barra degli indirizzi del browser: <br/>{{ reset_url }}
             </p>
@@ -38,6 +38,6 @@ reset_password:
     description:    'Inserisci una nuova password per il tuo account:'
     invalid:        'Questo link è scaduto o errato'
     back:           '<i class="fas fa-long-arrow-alt-left"></i> Annulla'
-    submit:         '<i class="far fa-save"></i> Reimposta password'
+    submit:         '<i class="far fa-save"></i> Reimposta'
     flash:
-        success: 'La tua password è stata aggiornata.'
+        success:    'La tua password è stata aggiornata.'

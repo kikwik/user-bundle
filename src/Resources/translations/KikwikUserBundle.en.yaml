@@ -2,7 +2,7 @@ change_password:
     title: 'Change password'
     description: 'Enter a new password for your account:'
     back: '<i class="fas fa-long-arrow-alt-left"></i> Cancel'
-    submit: '<i class="far fa-save"></i> Change password'
+    submit: '<i class="far fa-save"></i> Change'
     flash:
         success: 'The password has been changed.'
     form:
@@ -10,27 +10,27 @@ change_password:
         new_password_confirmation: 'Repeat new password'
 
 request_password:
-    title: 'Forgotten password'
-    description: 'Enter your username, you will receive an email with instructions to reset your password.'
+    title: 'Forgot password'
+    description: 'Enter your username, you will receive an email with instructions to change your password.'
     back: '<i class="fas fa-long-arrow-alt-left"></i> Cancel'
     submit: '<i class="far fa-save"></i> Request'
     flash:
-        success: 'We have sent you an email with instructions to reset your password.'
+        success: 'We have sent you an email with instructions on how to modify your password.'
         danger_no_user: 'User not found.'
         danger_no_email: 'Email address not found.'
         danger_no_email_configuration: 'Email address not configured.'
         danger_email_not_valid: 'The email address associated with your account is not valid.'
     form:
-        userIdentifier: 'User identifier'
+        userIdentifier: 'Username'
     email:
         sender: 'no-reply@example.com'
-        subject: 'Reset password instructions'
+        subject: 'Instructions for modify the password'
         content: |
             <p>
                 Hello {{ username }},<br/>
-                We received a request for resetting your password<br/>
-                <a href="{{ reset_url }}">Click here to choose a new password</a>
-                or paste the following link in your browser: <br/>{{ reset_url }}
+                We have received a request to change your password,
+                <a href="{{ reset_url }}">click here to choose a new password</a>
+                or paste the following link in the browser’s address bar: <br/>{{ reset_url }}
             </p>
 
 reset_password:
@@ -38,6 +38,6 @@ reset_password:
     description:    'Enter a new password for your account:'
     invalid:        'This link is expired or invalid.'
     back:           '<i class="fas fa-long-arrow-alt-left"></i> Cancel'
-    submit:         '<i class="far fa-save"></i> Reset password'
+    submit:         '<i class="far fa-save"></i> Reset'
     flash:
         success: 'Your password has been updated.'

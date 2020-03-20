@@ -1,0 +1,11 @@
+kikwik_user:
+    password:
+        blank: 'Le mot de passe ne peut pas être vide.'
+        short: 'Le mot de passe que vous avez choisi est trop court (min. %min% caractères).'
+        mismatch: 'Les deux mots de passe ne correspondent pas.'
+    new_password:
+        blank: 'Le mot de passe ne peut pas être vide.'
+        short: 'Le mot de passe que vous avez choisi est trop court (min. %min% caractères).'
+        mismatch: 'Les deux mots de passe ne correspondent pas.'
+    userIdentifier:
+        blank: 'Le nom d''utilisateur ne peut pas être vide.'
