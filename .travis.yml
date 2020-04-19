@@ -20,10 +20,11 @@ jobs:
 
         # Test the latest stable release
         - php: 7.1
+          env: SYMFONY_DEPRECATIONS_HELPER="max[self]=0"
 
         # Coverage
         - php: 7.1
-          env: COVERAGE=true PHPUNIT_FLAGS="-v --coverage-text"
+          env: COVERAGE=true PHPUNIT_FLAGS="-v --coverage-text" SYMFONY_DEPRECATIONS_HELPER="max[self]=0"
 
     allow_failures:
         # Dev-master is allowed to fail.
