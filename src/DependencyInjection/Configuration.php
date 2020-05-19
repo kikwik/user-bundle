@@ -17,6 +17,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('user_class')->defaultValue('App\Entity\User')->cannotBeEmpty()->end()
                 ->scalarNode('user_identifier_field')->defaultValue('username')->cannotBeEmpty()->end()
                 ->scalarNode('user_email_field')->defaultNull()->end()
+                ->integerNode('password_min_length')->defaultValue(8)->end()
             ->end()
         ;
 

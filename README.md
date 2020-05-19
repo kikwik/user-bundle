@@ -69,6 +69,7 @@ kikwik_user:
     user_class: App\Entity\User
     user_identifier_field: username
     user_email_field: email
+    password_min_length: 8
 ```
 
 Enable timestampable and blameable doctrine extension in `config/packages/stof_doctrine_extensions.yaml`

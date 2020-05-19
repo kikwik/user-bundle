@@ -20,6 +20,7 @@
       <argument>%kikwik_user.user_class%</argument>
       <argument>%kikwik_user.user_identifier_field%</argument>
       <argument>%kikwik_user.user_email_field%</argument>
+      <argument>%kikwik_user.password_min_length%</argument>
       <argument type="service" id="doctrine.orm.entity_manager" />
       <argument type="service" id="security.password_encoder" />
       <argument type="service" id="translator" />

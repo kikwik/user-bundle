@@ -2,12 +2,14 @@
 
 namespace Kikwik\UserBundle\Form;
 
+
+use Kikwik\UserBundle\Validator\Constraints\Password;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\NotBlank;
+
 
 class ChangePasswordFormType extends AbstractType
 {
@@ -20,7 +22,7 @@ class ChangePasswordFormType extends AbstractType
                 'invalid_message' => 'kikwik_user.new_password.mismatch',
                 'first_options' => ['label' => 'change_password.form.new_password', 'attr' => ['autocomplete' => 'off']],
                 'second_options' => ['label' => 'change_password.form.new_password_confirmation'],
-                'constraints' => [ new NotBlank(['message'=>'kikwik_user.new_password.blank'])]
+                'constraints' => new Password(['min'=>$options['password_min_length']]),
             ));
     }
 
@@ -28,6 +30,7 @@ class ChangePasswordFormType extends AbstractType
     {
         $resolver->setDefaults([
             'translation_domain' => 'KikwikUserBundle',
+            'password_min_length' => 8,
         ]);
     }
 

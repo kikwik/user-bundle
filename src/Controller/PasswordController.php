@@ -33,7 +33,9 @@ class PasswordController extends AbstractController
 
     private $mailer;
 
-    public function __construct(string $userClass, string $userIdentifierField, ?string $userEmailField, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, TranslatorInterface $translator, MailerInterface $mailer)
+    private $passwordMinLength;
+
+    public function __construct(string $userClass, string $userIdentifierField, ?string $userEmailField, int $passwordMinLength, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, TranslatorInterface $translator, MailerInterface $mailer)
     {
         $this->userClass = $userClass;
         $this->userIdentifierField = $userIdentifierField;
@@ -42,6 +44,7 @@ class PasswordController extends AbstractController
         $this->passwordEncoder = $passwordEncoder;
         $this->translator = $translator;
         $this->mailer = $mailer;
+        $this->passwordMinLength = $passwordMinLength;
     }
 
     public function changePassword(Request $request, SessionInterface $session)
@@ -53,7 +56,7 @@ class PasswordController extends AbstractController
         $this->saveReferer($request, $session);
 
         // create and submit form
-        $form = $this->createForm(ChangePasswordFormType::class);
+        $form = $this->createForm(ChangePasswordFormType::class, null, ['password_min_length'=>$this->passwordMinLength]);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid())
         {
@@ -176,7 +179,7 @@ class PasswordController extends AbstractController
         ]);
 
         // create form
-        $form = $this->createForm(ChangePasswordFormType::class);
+        $form = $this->createForm(ChangePasswordFormType::class, null, ['password_min_length'=>$this->passwordMinLength]);
 
         if($user)
         {
