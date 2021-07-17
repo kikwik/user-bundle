@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.1.4 (2021-07-17)
+- added support for symfony 5
+
 ## v0.1.2 (2020-05-19)
 - Password validator (check for not blank and min length password)
 
