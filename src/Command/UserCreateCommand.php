@@ -42,10 +42,12 @@ class UserCreateCommand extends BaseCommand
         $io = new SymfonyStyle($input, $output);
         $io->title('Creating a new '.$this->userClass);
 
+        $askForSuperAdmin = !$input->getArgument('password') && !$input->getOption('super-admin');
+
         $this->askForUsernameArgument($input, $output, false);
         $this->askForPasswordArgument($input, $output, false);
 
-        if(!$input->getOption('super-admin'))
+        if($askForSuperAdmin)
         {
             $superAdminQuestion = new ConfirmationQuestion('Is this a super admin user?', false);
             $input->setOption('super-admin', $io->askQuestion($superAdminQuestion));
