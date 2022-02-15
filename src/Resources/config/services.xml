@@ -22,7 +22,7 @@
       <argument>%kikwik_user.user_email_field%</argument>
       <argument>%kikwik_user.password_min_length%</argument>
       <argument type="service" id="doctrine.orm.entity_manager" />
-      <argument type="service" id="security.password_encoder" />
+      <argument type="service" id="security.user_password_hasher" />
       <argument type="service" id="translator" />
       <argument type="service" id="mailer.mailer" />
       <call method="setContainer">
@@ -35,7 +35,7 @@
       <argument>%kikwik_user.user_class%</argument>
       <argument>%kikwik_user.user_identifier_field%</argument>
       <argument type="service" id="doctrine.orm.entity_manager" />
-      <argument type="service" id="security.password_encoder" />
+      <argument type="service" id="security.user_password_hasher" />
       <tag name="console.command" command="kikwik:user:create" />
     </service>
 
@@ -52,7 +52,7 @@
       <argument>%kikwik_user.user_class%</argument>
       <argument>%kikwik_user.user_identifier_field%</argument>
       <argument type="service" id="doctrine.orm.entity_manager" />
-      <argument type="service" id="security.password_encoder" />
+      <argument type="service" id="security.user_password_hasher" />
       <tag name="console.command" command="kikwik:user:edit" />
     </service>
 

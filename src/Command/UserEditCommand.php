@@ -11,20 +11,17 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserEditCommand extends BaseCommand
 {
-    /**
-     * @var \Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface
-     */
-    private $passwordEncoder;
+    private $passwordHasher;
 
 
-    public function __construct(string $userClass, string $userIdentifierField, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(string $userClass, string $userIdentifierField, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher)
     {
         parent::__construct($userClass, $userIdentifierField, $entityManager);
-        $this->passwordEncoder = $passwordEncoder;
+        $this->passwordHasher = $passwordHasher;
     }
 
     protected function configure()
@@ -64,7 +61,7 @@ class UserEditCommand extends BaseCommand
 
         if($newPassword)
         {
-            $user->setPassword($this->passwordEncoder->encodePassword($user,$newPassword));
+            $user->setPassword($this->passwordHasher->hashPassword($user,$newPassword));
         }
 
         if($newRoles)

@@ -12,8 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PasswordController extends AbstractController
@@ -27,7 +27,7 @@ class PasswordController extends AbstractController
 
     private $entityManager;
 
-    private $passwordEncoder;
+    private $passwordHasher;
 
     private $translator;
 
@@ -35,13 +35,13 @@ class PasswordController extends AbstractController
 
     private $passwordMinLength;
 
-    public function __construct(string $userClass, string $userIdentifierField, ?string $userEmailField, int $passwordMinLength, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder, TranslatorInterface $translator, MailerInterface $mailer)
+    public function __construct(string $userClass, string $userIdentifierField, ?string $userEmailField, int $passwordMinLength, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, TranslatorInterface $translator, MailerInterface $mailer)
     {
         $this->userClass = $userClass;
         $this->userIdentifierField = $userIdentifierField;
         $this->userEmailField = $userEmailField;
         $this->entityManager = $entityManager;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->passwordHasher = $passwordHasher;
         $this->translator = $translator;
         $this->mailer = $mailer;
         $this->passwordMinLength = $passwordMinLength;
@@ -64,7 +64,7 @@ class PasswordController extends AbstractController
             $newPassword = $data['newPassword'];
 
             $user = $this->getUser();
-            $user->setPassword($this->passwordEncoder->encodePassword($user,$newPassword));
+            $user->setPassword($this->passwordHasher->hashPassword($user,$newPassword));
 
             $this->entityManager->persist($user);
             $this->entityManager->flush();
@@ -190,7 +190,7 @@ class PasswordController extends AbstractController
                 $data = $form->getData();
                 $newPassword = $data['newPassword'];
 
-                $user->setPassword($this->passwordEncoder->encodePassword($user,$newPassword));
+                $user->setPassword($this->passwordHasher->encodePassword($user,$newPassword));
                 $user->removeChangePasswordSecret();
 
                 $this->entityManager->persist($user);

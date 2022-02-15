@@ -9,20 +9,17 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserCreateCommand extends BaseCommand
 {
-    /**
-     * @var \Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface
-     */
-    private $passwordEncoder;
+    private $passwordHasher;
 
 
-    public function __construct(string $userClass, string $userIdentifierField, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(string $userClass, string $userIdentifierField, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher)
     {
         parent::__construct($userClass, $userIdentifierField, $entityManager);
-        $this->passwordEncoder = $passwordEncoder;
+        $this->passwordHasher = $passwordHasher;
     }
 
     protected function configure()
@@ -70,7 +67,7 @@ class UserCreateCommand extends BaseCommand
         $user->$usernameSetter($username);
 
         // password
-        $user->setPassword($this->passwordEncoder->encodePassword($user,$password));
+        $user->setPassword($this->passwordHasher->hashPassword($user,$password));
 
         // super-admin
         if($superadmin)
