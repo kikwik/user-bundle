@@ -18,6 +18,8 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('user_identifier_field')->defaultValue('username')->cannotBeEmpty()->end()
                 ->scalarNode('user_email_field')->defaultNull()->end()
                 ->integerNode('password_min_length')->defaultValue(8)->end()
+                ->scalarNode('sender_email')->defaultNull()->end()
+                ->scalarNode('sender_name')->defaultValue('')->end()
             ->end()
         ;
 

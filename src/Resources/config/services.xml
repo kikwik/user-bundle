@@ -21,6 +21,8 @@
       <argument>%kikwik_user.user_identifier_field%</argument>
       <argument>%kikwik_user.user_email_field%</argument>
       <argument>%kikwik_user.password_min_length%</argument>
+      <argument>%kikwik_user.sender_email%</argument>
+      <argument>%kikwik_user.sender_name%</argument>
       <argument type="service" id="doctrine.orm.entity_manager" />
       <argument type="service" id="security.user_password_hasher" />
       <argument type="service" id="translator" />

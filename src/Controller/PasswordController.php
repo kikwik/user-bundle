@@ -34,8 +34,16 @@ class PasswordController extends AbstractController
     private $mailer;
 
     private $passwordMinLength;
+    /**
+     * @var string
+     */
+    private $senderEmail;
+    /**
+     * @var string
+     */
+    private $senderName;
 
-    public function __construct(string $userClass, string $userIdentifierField, ?string $userEmailField, int $passwordMinLength, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, TranslatorInterface $translator, MailerInterface $mailer)
+    public function __construct(string $userClass, string $userIdentifierField, ?string $userEmailField, int $passwordMinLength, ?string $senderEmail, ?string $senderName, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, TranslatorInterface $translator, MailerInterface $mailer)
     {
         $this->userClass = $userClass;
         $this->userIdentifierField = $userIdentifierField;
@@ -45,6 +53,8 @@ class PasswordController extends AbstractController
         $this->translator = $translator;
         $this->mailer = $mailer;
         $this->passwordMinLength = $passwordMinLength;
+        $this->senderEmail = $senderEmail;
+        $this->senderName = $senderName;
     }
 
     public function changePassword(Request $request, SessionInterface $session)
@@ -136,9 +146,17 @@ class PasswordController extends AbstractController
                 }
 
                 // send email
+                if($this->senderEmail)
+                {
+                    $fromAddress = New Address($this->senderEmail, $this->senderName);
+                }
+                else
+                {
+                    $fromAddress = New Address($this->translator->trans('request_password.email.sender',[],'KikwikUserBundle'));
+                }
                 $email = new TemplatedEmail();
                 $email
-                    ->from($this->translator->trans('request_password.email.sender',[],'KikwikUserBundle'))
+                    ->from($fromAddress)
                     ->to($userEmail)
                     ->subject($this->translator->trans('request_password.email.subject',[],'KikwikUserBundle'))
                     ->htmlTemplate('@KikwikUser/email/requestPassword.html.twig')

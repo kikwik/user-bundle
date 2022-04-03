@@ -70,6 +70,15 @@ kikwik_user:
     user_identifier_field: username
     user_email_field: email
     password_min_length: 8
+    sender_email: '%env(SENDER_EMAIL)%'
+    sender_name: '%env(SENDER_NAME)%'
+```
+
+and define sender vars in your .env file
+
+```dotenv
+SENDER_EMAIL=no-reply@example.com
+SENDER_NAME="My Company Name"
 ```
 
 Enable timestampable and blameable doctrine extension in `config/packages/stof_doctrine_extensions.yaml`

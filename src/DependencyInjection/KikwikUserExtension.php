@@ -24,6 +24,8 @@ class KikwikUserExtension extends Extension
         $passwordController->setArgument(1, $config['user_identifier_field']);
         $passwordController->setArgument(2, $config['user_email_field']);
         $passwordController->setArgument(3, $config['password_min_length']);
+        $passwordController->setArgument(4, $config['sender_email']);
+        $passwordController->setArgument(5, $config['sender_name']);
 
         $cerateUserCommand = $container->getDefinition('kikwik_user.command.user_create_command');
         $cerateUserCommand->setArgument(0, $config['user_class']);
