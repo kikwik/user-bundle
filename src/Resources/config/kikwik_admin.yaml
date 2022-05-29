@@ -1,0 +1,42 @@
+sidebar:
+    users: { title: Utenti,    route: kikwik_admin_user,       icon: fa fa-user }
+admins:
+    user:
+        entityClass: App\Entity\User
+        controller: Kikwik\AdminBundle\Controller\CRUDUserController
+        singularName: utente
+        pluralName: utenti
+        gender: male
+        fields:
+            email:                      { label: Email }
+            plainPassword:              { label: Password, formType: 'Symfony\Component\Form\Extension\Core\Type\RepeatedType', formTypeOptions: { type: 'Symfony\Component\Form\Extension\Core\Type\PasswordType', invalid_message: 'Le due password devono essere uguali.', first_options: { label: 'Password', help: 'Lasciare vuoto per NON cambiare la password', attr: { autocomplete: 'new-password' } }, second_options: { label: 'Ripeti password' } } }
+            passwordChangedAt:          { label: Ultimo cambio passowrd }
+            changePasswordSecret:       { label: Codice per cambio password }
+            changePasswordRequestedAt:  { label: Data Richiesta cambio password }
+            roles:                      { label: Permessi, formType: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType', formTypeOptions: { multiple: true, expanded: true } }
+            rolesAsBadges:              { label: Permessi, sortPath: false }
+            loginCount:                 { label: '# login' }
+            previousLogin:              { label: Login precedente }
+            lastLogin:                  { label: Ultimo login }
+            isEnabled:                  { label: Attivo }
+            createdAt:                  { label: Data creazione }
+            updatedAt:                  { label: Ultimo aggiornamento }
+            createdBy:                  { label: Creato da }
+            updatedBy:                  { label: Modificato da }
+            createdFromIp:              { label: IP di creazione }
+            updatedFromIp:              { label: IP di modifica }
+        collection:
+            display:      [ email, rolesAsBadges, createdAt, isEnabled, loginCount, lastLogin ]
+            quickSearch:  [ email, roles ]
+            filters:      [ isEnabled, loginCount ]
+            export:       [ email, roles, isEnabled, loginCount, previousLogin, lastLogin, passwordChangedAt, createdBy, createdFromIp, createdAt, updatedBy, updatedFromIp, updatedAt ]
+        object:
+            display:  [ email, rolesAsBadges, isEnabled, loginCount, previousLogin, lastLogin, passwordChangedAt, createdBy, createdFromIp, createdAt, updatedBy, updatedFromIp, updatedAt ]
+            form:     [ email, isEnabled, plainPassword, roles ]
+            actions:
+                impersonate: { label: impersonifica, icon: fas fa-user-secret, color: purple, methods: [ GET ], condition: { roles: [ ROLE_ALLOWED_TO_SWITCH ] } }
+            layout:
+                row1: [
+                    { title: Credenziali, class: col, color: white, bgColor: green, style: table, fields: [ email, plainPassword ] }
+                    { title: Permessi, class: col, color: dark, bgColor: yellow, style: table, fields: [ isEnabled, roles ] }
+                ]

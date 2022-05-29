@@ -20,6 +20,7 @@ class Configuration implements ConfigurationInterface
                 ->integerNode('password_min_length')->defaultValue(8)->end()
                 ->scalarNode('sender_email')->defaultNull()->end()
                 ->scalarNode('sender_name')->defaultValue('')->end()
+                ->booleanNode('enable_admin')->defaultTrue()->end()
             ->end()
         ;
 

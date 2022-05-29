@@ -72,6 +72,7 @@ kikwik_user:
     password_min_length: 8
     sender_email: '%env(SENDER_EMAIL)%'
     sender_name: '%env(SENDER_NAME)%'
+    enable_admin: true
 ```
 
 and define sender vars in your .env file
