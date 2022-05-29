@@ -26,6 +26,17 @@ class KikwikUserExtension extends Extension implements PrependExtensionInterface
             if (isset($bundles['KikwikAdminBundle']))
             {
                 $configForAdmin = Yaml::parseFile(__DIR__.'/../Resources/config/kikwik_admin.yaml');
+
+                if(isset($bundles['KikwikUserLogBundle']))
+                {
+                    $configForAdmin['admins']['user']['object']['actions']['logs'] = [
+                        'label' => 'Logs',
+                        'icon' => 'fas fa-history',
+                        'condition' => [
+                            'roles' => [ 'ROLE_ADMIN_USER_LOG_SESSION_LIST', 'ROLE_SUPER_ADMIN' ]
+                        ]
+                    ];
+                }
                 $container->prependExtensionConfig('kikwik_admin', $configForAdmin);
             }
         }

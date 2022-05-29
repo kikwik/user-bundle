@@ -31,12 +31,13 @@ admins:
             filters:      [ isEnabled, loginCount ]
             export:       [ email, roles, isEnabled, loginCount, previousLogin, lastLogin, passwordChangedAt, createdBy, createdFromIp, createdAt, updatedBy, updatedFromIp, updatedAt ]
         object:
-            display:  [ email, rolesAsBadges, isEnabled, loginCount, previousLogin, lastLogin, passwordChangedAt, createdBy, createdFromIp, createdAt, updatedBy, updatedFromIp, updatedAt ]
+            display:  [ email, rolesAsBadges, isEnabled, loginCount, previousLogin, lastLogin, passwordChangedAt ]
             form:     [ email, isEnabled, plainPassword, roles ]
             actions:
                 impersonate: { label: impersonifica, icon: fas fa-user-secret, color: purple, methods: [ GET ], condition: { roles: [ ROLE_ALLOWED_TO_SWITCH ] } }
             layout:
                 row1: [
-                    { title: Credenziali, class: col, color: white, bgColor: green, style: table, fields: [ email, plainPassword ] }
-                    { title: Permessi, class: col, color: dark, bgColor: yellow, style: table, fields: [ isEnabled, roles ] }
+                    { title: Credenziali, class: col-lg-6, color: white, bgColor: green, style: table, fields: [ email, plainPassword, passwordChangedAt ] }
+                    { title: Permessi, class: col-lg-6, color: dark, bgColor: yellow, style: table, fields: [ isEnabled, roles ] }
+                    { title: Accessi, class: col-12, style: table, fields: [ loginCount, previousLogin, lastLogin ] }
                 ]
