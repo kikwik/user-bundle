@@ -110,7 +110,7 @@ security:
 
 ### Change password ###
 
-To activate the change and forgot password feature add routes in `config/routes.yaml`:
+To activate the change and forgot password feature add routes in `config/routes/kikwik_user.yaml`:
 
 ```yaml
 kikwik_user_bundle_password:
