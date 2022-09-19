@@ -34,7 +34,7 @@ admins:
             display:  [ email, rolesAsBadges, isEnabled, loginCount, previousLogin, lastLogin, passwordChangedAt ]
             form:     [ email, isEnabled, plainPassword, roles ]
             actions:
-                impersonate: { label: impersonifica, icon: fas fa-user-secret, color: purple, methods: [ GET ], condition: { roles: [ ROLE_ALLOWED_TO_SWITCH ] } }
+                impersonate: { label: impersonifica, icon: fas fa-user-secret, color: purple, methods: [ GET ], condition: { roles: [ ROLE_ALLOWED_TO_SWITCH ], method: isEnabled } }
             layout:
                 row1: [
                     { title: Credenziali, class: col-lg-6, color: white, bgColor: green, style: table, fields: [ email, plainPassword, passwordChangedAt ] }
