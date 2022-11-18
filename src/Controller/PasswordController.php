@@ -208,7 +208,7 @@ class PasswordController extends AbstractController
                 $data = $form->getData();
                 $newPassword = $data['newPassword'];
 
-                $user->setPassword($this->passwordHasher->encodePassword($user,$newPassword));
+                $user->setPassword($this->passwordHasher->hashPassword($user,$newPassword));
                 $user->removeChangePasswordSecret();
 
                 $this->entityManager->persist($user);
