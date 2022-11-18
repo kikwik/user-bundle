@@ -168,7 +168,7 @@ class PasswordController extends AbstractController
                 $this->mailer->send($email);
 
 
-                $this->addFlash('success_request_password',$this->translator->trans('request_password.flash.success',[],'KikwikUserBundle'));
+                $this->addFlash('success request_password',$this->translator->trans('request_password.flash.success',[],'KikwikUserBundle'));
                 return $this->redirectToRoute('kikwik_user_password_request');
             }
             else
