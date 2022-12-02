@@ -22,7 +22,8 @@ request_password:
         danger_no_email_configuration:  'E-Mail-Adresse nicht konfiguriert.'
         danger_email_not_valid:         'Die Ihrem Konto zugeordnete E-Mail-Adresse ist ungültig.'
     form:
-        userIdentifier: 'Nutzername'
+        userIdentifier:             'E-Mail-Addresse'
+        userIdentifier_username:    'Nutzername'
     email:
         sender:  'no-reply@example.com'
         subject: 'Anweisungen zum Ändern des Passworts'

@@ -22,7 +22,8 @@ request_password:
         danger_no_email_configuration:  'Indirizzo email non configurato.'
         danger_email_not_valid:         'L''indirizzo mail associato al tuo account non è valido.'
     form:
-        userIdentifier: 'Nome utente'
+        userIdentifier:             'Indirizzo email'
+        userIdentifier_username:    'Nome utente'
     email:
         sender:  'no-reply@example.com'
         subject: 'Istruzioni per reimpostare la password'

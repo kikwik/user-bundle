@@ -15,7 +15,7 @@ class RequestPasswordFormType extends AbstractType
         $builder
             ->add('userIdentifier', TextType::class, array(
                 'required' => true,
-                'label' => 'request_password.form.userIdentifier',
+                'label' => $options['askForEmail'] ? 'request_password.form.userIdentifier' : 'request_password.form.userIdentifier_username',
                 'constraints' => [ new NotBlank(['message'=>'kikwik_user.userIdentifier.blank'])]
             ));
     }
@@ -25,6 +25,7 @@ class RequestPasswordFormType extends AbstractType
     {
         $resolver->setDefaults([
             'translation_domain' => 'KikwikUserBundle',
+            'askForEmail' => true,
         ]);
     }
 }

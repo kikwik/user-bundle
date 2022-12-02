@@ -22,7 +22,8 @@ request_password:
         danger_no_email_configuration:  'Adresse e-mail non configurée.'
         danger_email_not_valid:         'L''adresse e-mail associée à votre compte n''est pas valide.'
     form:
-        userIdentifier: 'Identification'
+        userIdentifier:             'Adresse e-mail'
+        userIdentifier_username:    'Identification'
     email:
         sender:  'no-reply@example.com'
         subject: 'ìInstructions pour changer le mot de passe'

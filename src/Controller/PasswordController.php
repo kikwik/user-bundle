@@ -98,11 +98,13 @@ class PasswordController extends AbstractController
             return $this->redirect($this->generateUrl('kikwik_user_password_change'));
         }
 
+        $askForEmail = $this->userIdentifierField == $this->userEmailField;
+
         // save referer
         $this->saveReferer($request, $session);
 
         // create and submit form
-        $form = $this->createForm(RequestPasswordFormType::class);
+        $form = $this->createForm(RequestPasswordFormType::class,null,['askForEmail'=>$askForEmail]);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid())
         {
@@ -178,7 +180,7 @@ class PasswordController extends AbstractController
 
         return $this->render('@KikwikUser/requestPassword.html.twig', [
             'form' => $form->createView(),
-            'askForEmail' => $this->userIdentifierField == $this->userEmailField,
+            'askForEmail' => $askForEmail,
         ]);
     }
 
