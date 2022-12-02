@@ -101,8 +101,6 @@ class PasswordController extends AbstractController
         // save referer
         $this->saveReferer($request, $session);
 
-        $successMessage = null;
-
         // create and submit form
         $form = $this->createForm(RequestPasswordFormType::class);
         $form->handleRequest($request);
@@ -180,7 +178,7 @@ class PasswordController extends AbstractController
 
         return $this->render('@KikwikUser/requestPassword.html.twig', [
             'form' => $form->createView(),
-            'successMessage' => $successMessage,
+            'askForEmail' => $this->userIdentifierField == $this->userEmailField,
         ]);
     }
 

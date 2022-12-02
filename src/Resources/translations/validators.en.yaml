@@ -1,7 +1,7 @@
 kikwik_user:
     new_password:
-        blank: 'The password cannot be empty.'
-        short: 'The password you have chosen is too short (min. {{ limit }} characters).'
-        mismatch: 'The two passwords do not match.'
+        blank:      'The password cannot be empty.'
+        short:      'The password you have chosen is too short (min. {{ limit }} characters).'
+        mismatch:   'The two passwords do not match.'
     userIdentifier:
-        blank: 'Username cannot be empty.'
+        blank:      'Username cannot be empty.'

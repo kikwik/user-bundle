@@ -1,29 +1,30 @@
 change_password:
-    title: 'Passwort ändern'
-    description: 'Geben Sie ein neues Passwort für Ihr Konto ein:'
-    back: '<i class="fas fa-long-arrow-alt-left"></i> Stornieren'
-    submit: '<i class="far fa-save"></i> Ändern'
+    title:          'Passwort ändern'
+    description:    'Geben Sie ein neues Passwort für Ihr Konto ein:'
+    back:           '<i class="fas fa-long-arrow-alt-left"></i> Stornieren'
+    submit:         '<i class="far fa-save"></i> Ändern'
     flash:
-        success: 'Das Passwort wurde geändert.'
+        success:    'Das Passwort wurde geändert.'
     form:
-        new_password: 'Neues Kennwort'
-        new_password_confirmation: 'Wiederholen Sie das neue Passwort'
+        new_password:               'Neues Kennwort'
+        new_password_confirmation:  'Wiederholen Sie das neue Passwort'
 
 request_password:
-    title: 'Passwort vergessen'
-    description: 'Geben Sie Ihren Benutzernamen ein. Sie erhalten eine E-Mail mit Anweisungen zum Ändern Ihres Passworts.'
-    back: '<i class="fas fa-long-arrow-alt-left"></i> Stornieren'
-    submit: '<i class="far fa-save"></i> Anforderung'
+    title:                  'Passwort vergessen'
+    description:            'Geben Sie Ihre E-Mail-Adresse ein, Sie erhalten eine Nachricht mit Anweisungen zum Zurücksetzen Ihres Passworts.'
+    description_username:   'Geben Sie Ihren Benutzernamen ein. Sie erhalten eine E-Mail mit Anweisungen zum Ändern Ihres Passworts.'
+    back:                   '<i class="fas fa-long-arrow-alt-left"></i> Stornieren'
+    submit:                 '<i class="far fa-save"></i> Anforderung'
     flash:
-        success: 'Wir haben Ihnen eine E-Mail mit Anweisungen zum Ändern Ihres Passworts gesendet.'
-        danger_no_user: 'Benutzer nicht gefunden.'
-        danger_no_email: 'Emailadresse wurde nicht gefunden.'
-        danger_no_email_configuration: 'E-Mail-Adresse nicht konfiguriert.'
-        danger_email_not_valid: 'Die Ihrem Konto zugeordnete E-Mail-Adresse ist ungültig.'
+        success:                        'Wir haben Ihnen eine E-Mail mit Anweisungen zum Ändern Ihres Passworts gesendet.'
+        danger_no_user:                 'Benutzer nicht gefunden.'
+        danger_no_email:                'Emailadresse wurde nicht gefunden.'
+        danger_no_email_configuration:  'E-Mail-Adresse nicht konfiguriert.'
+        danger_email_not_valid:         'Die Ihrem Konto zugeordnete E-Mail-Adresse ist ungültig.'
     form:
         userIdentifier: 'Nutzername'
     email:
-        sender: 'no-reply@example.com'
+        sender:  'no-reply@example.com'
         subject: 'Anweisungen zum Ändern des Passworts'
         content: |
             <p>

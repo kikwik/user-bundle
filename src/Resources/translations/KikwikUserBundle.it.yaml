@@ -10,10 +10,11 @@ change_password:
         new_password_confirmation:  'Ripeti la nuova password'
 
 request_password:
-    title:          'Password dimenticata'
-    description:    'Inserisci il tuo nome utente, riceverai una mail con le istruzioni per reimpostare la tua password.'
-    back:           '<i class="fas fa-long-arrow-alt-left"></i> Annulla'
-    submit:         '<i class="far fa-save"></i> Richiedi'
+    title:                  'Password dimenticata'
+    description:            'Inserisci il tuo indirizzo email, riceverai un messaggio con le istruzioni per reimpostare la tua password.'
+    description_username:   'Inserisci il tuo nome utente, riceverai una mail con le istruzioni per reimpostare la tua password.'
+    back:                   '<i class="fas fa-long-arrow-alt-left"></i> Annulla'
+    submit:                 '<i class="far fa-save"></i> Richiedi'
     flash:
         success:                        'Ti abbiamo inviato una mail con le istruzioni per reimpostare la tua password.'
         danger_no_user:                 'Utente non trovato.'

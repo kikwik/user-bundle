@@ -1,7 +1,7 @@
 kikwik_user:
     new_password:
-        blank: 'Das Passwort darf nicht leer sein.'
-        short: 'Das von Ihnen gewählte Passwort ist zu kurz (mindestens {{ limit }} Zeichen).'
-        mismatch: 'Die zwei Passwörter stimmen nicht überein.'
+        blank:      'Das Passwort darf nicht leer sein.'
+        short:      'Das von Ihnen gewählte Passwort ist zu kurz (mindestens {{ limit }} Zeichen).'
+        mismatch:   'Die zwei Passwörter stimmen nicht überein.'
     userIdentifier:
-        blank: 'Der Benutzername darf nicht leer sein.'
+        blank:      'Der Benutzername darf nicht leer sein.'

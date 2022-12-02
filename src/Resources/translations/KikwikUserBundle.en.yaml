@@ -1,29 +1,30 @@
 change_password:
-    title: 'Change password'
-    description: 'Enter a new password for your account:'
-    back: '<i class="fas fa-long-arrow-alt-left"></i> Cancel'
-    submit: '<i class="far fa-save"></i> Change'
+    title:          'Change password'
+    description:    'Enter a new password for your account:'
+    back:           '<i class="fas fa-long-arrow-alt-left"></i> Cancel'
+    submit:         '<i class="far fa-save"></i> Change'
     flash:
-        success: 'The password has been changed.'
+        success:    'The password has been changed.'
     form:
-        new_password: 'New password'
-        new_password_confirmation: 'Repeat new password'
+        new_password:               'New password'
+        new_password_confirmation:  'Repeat new password'
 
 request_password:
-    title: 'Forgot password'
-    description: 'Enter your username, you will receive an email with instructions to change your password.'
-    back: '<i class="fas fa-long-arrow-alt-left"></i> Cancel'
-    submit: '<i class="far fa-save"></i> Request'
+    title:                  'Forgot password'
+    description:            'Enter your email address, you will receive a message with instructions for resetting your password.'
+    description_username:   'Enter your username, you will receive an email with instructions for resetting your password.'
+    back:                   '<i class="fas fa-long-arrow-alt-left"></i> Cancel'
+    submit:                 '<i class="far fa-save"></i> Request'
     flash:
-        success: 'We have sent you an email with instructions on how to modify your password.'
-        danger_no_user: 'User not found.'
-        danger_no_email: 'Email address not found.'
-        danger_no_email_configuration: 'Email address not configured.'
-        danger_email_not_valid: 'The email address associated with your account is not valid.'
+        success:                        'We have sent you an email with instructions on how to modify your password.'
+        danger_no_user:                 'User not found.'
+        danger_no_email:                'Email address not found.'
+        danger_no_email_configuration:  'Email address not configured.'
+        danger_email_not_valid:         'The email address associated with your account is not valid.'
     form:
         userIdentifier: 'Username'
     email:
-        sender: 'no-reply@example.com'
+        sender:  'no-reply@example.com'
         subject: 'Instructions for modify the password'
         content: |
             <p>
