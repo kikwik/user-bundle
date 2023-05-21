@@ -15,17 +15,20 @@ class KikwikUserExtension extends Extension implements PrependExtensionInterface
 {
     public function prepend(ContainerBuilder $container)
     {
+        // stof_doctrine_extensions configuration
+        $stofDoctrineExtensionConfig = Yaml::parseFile(__DIR__.'/../Resources/config/bundles/stof_doctrine_extensions.yaml');
+        $container->prependExtensionConfig('stof_doctrine_extensions', $stofDoctrineExtensionConfig);
+
+        // kikwik_admin configuration
         $configs = $container->getExtensionConfig($this->getAlias());
-        $enableAdmin = isset($configs[0]['enable_admin'])
-            ? $configs[0]['enable_admin']
-            : true;
+        $enableAdmin = !isset($configs[0]['enable_admin']) || $configs[0]['enable_admin'];
 
         if($enableAdmin)
         {
             $bundles = $container->getParameter('kernel.bundles');
             if (isset($bundles['KikwikAdminBundle']))
             {
-                $configForAdmin = Yaml::parseFile(__DIR__.'/../Resources/config/kikwik_admin.yaml');
+                $configForAdmin = Yaml::parseFile(__DIR__.'/../Resources/config/bundles/kikwik_admin.yaml');
 
                 if(isset($bundles['KikwikUserLogBundle']))
                 {

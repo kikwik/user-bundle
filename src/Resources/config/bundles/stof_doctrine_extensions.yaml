@@ -1,0 +1,4 @@
+orm:
+    default:
+        timestampable: true
+        blameable: true

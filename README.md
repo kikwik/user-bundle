@@ -84,16 +84,6 @@ SENDER_NAME="My Company Name"
 ###< kikwik/user-bundle ###
 ```
 
-Enable timestampable and blameable doctrine extension in `config/packages/stof_doctrine_extensions.yaml`
-
-```yaml
-stof_doctrine_extensions:
-    default_locale: en_US
-    orm:
-        default:
-            timestampable: true
-            blameable: true
-```
 
 Features
 ------------
