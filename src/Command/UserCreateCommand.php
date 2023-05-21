@@ -75,6 +75,10 @@ class UserCreateCommand extends BaseCommand
             $user->setRoles(['ROLE_SUPER_ADMIN']);
         }
 
+        // set updatedBy and updatedBy
+        $user->setCreatedBy('kikwik:user:create');
+        $user->setUpdatedBy('kikwik:user:create');
+
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
