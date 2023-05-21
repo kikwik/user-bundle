@@ -2,6 +2,7 @@
 
 namespace Kikwik\UserBundle\Model;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\IpTraceable\Traits\IpTraceableEntity;
@@ -84,6 +85,8 @@ abstract class BaseUser implements UserInterface
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Timestampable(on="change", field={"password"})
      */
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Gedmo\Timestampable(on: 'change', field: ['password'])]
     protected $passwordChangedAt;
 
     /**
@@ -91,6 +94,7 @@ abstract class BaseUser implements UserInterface
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     protected $changePasswordSecret;
 
     /**
@@ -99,6 +103,8 @@ abstract class BaseUser implements UserInterface
      * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Timestampable(on="change", field={"changePasswordSecret"})
      */
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Gedmo\Timestampable(on: 'change', field: ['changePasswordSecret'])]
     protected $changePasswordRequestedAt;
 
     /**
@@ -157,18 +163,21 @@ abstract class BaseUser implements UserInterface
      * @var \DateTime|null
      * @ORM\Column(type="datetime", nullable=true)
      */
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     protected $lastLogin;
 
     /**
      * @var \DateTime|null
      * @ORM\Column(type="datetime", nullable=true)
      */
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     protected $previousLogin;
 
     /**
      * @var integer
      * @ORM\Column(type="integer", options={"default" : 0})
      */
+    #[ORM\Column(type: Types::INTEGER, options: ['default'=>0] )]
     protected $loginCount = 0;
 
     /**
@@ -207,6 +216,7 @@ abstract class BaseUser implements UserInterface
      * @return bool
      * @ORM\Column(type="boolean", options={"default":"1"})
      */
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default'=>1])]
     protected $isEnabled = true;
 
     /**
