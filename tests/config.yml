@@ -12,10 +12,14 @@ doctrine:
         auto_generate_proxy_classes: true
 
 security:
-    encoders:
-        App\Entity\User:
-            algorithm: auto
+    enable_authenticator_manager: true
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
     firewalls:
         main:
-            anonymous: lazy
+            lazy: true
+            provider: app_user_provider
             user_checker: Kikwik\UserBundle\Security\UserChecker

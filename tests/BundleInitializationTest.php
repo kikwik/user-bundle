@@ -14,43 +14,56 @@ use Kikwik\UserBundle\KikwikUserBundle;
 use Kikwik\UserBundle\Security\UserChecker;
 use Nyholm\BundleTest\BaseBundleTestCase;
 use Nyholm\BundleTest\CompilerPass\PublicServicePass;
+use Nyholm\BundleTest\TestKernel;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
+use Symfony\Component\HttpKernel\KernelInterface;
 
-class BundleInitializationTest extends BaseBundleTestCase
+class BundleInitializationTest extends KernelTestCase
 {
-    protected function getBundleClass()
+    protected static function getKernelClass(): string
     {
-        return KikwikUserBundle::class;
+        return TestKernel::class;
     }
 
-    protected function setUp(): void
+    protected static function createKernel(array $options = []): KernelInterface
     {
-        parent::setUp();
+        /**
+         * @var TestKernel $kernel
+         */
+        $kernel = parent::createKernel($options);
+        $kernel->addTestBundle(KikwikUserBundle::class);
+        $kernel->handleOptions($options);
 
-        $this->addCompilerPass(new PublicServicePass('|kikwik_user.*|'));
+
+
+        return $kernel;
     }
 
-    public function testInitBundle()
+    public function testInitBundle(): void
     {
-        // Create a new Kernel
-        $kernel = $this->createKernel();
 
-        // Add some configuration
-        $kernel->addConfigFile(__DIR__.'/config.yml');
+        // Boot the kernel with a config closure, the handleOptions call in createKernel is important for that to work
+        $kernel = self::bootKernel(['config' => static function(TestKernel $kernel){
+            // Add some other bundles we depend on
+            $kernel->addTestBundle(FrameworkBundle::class);
+            $kernel->addTestBundle(DoctrineBundle::class);
+            $kernel->addTestBundle(SecurityBundle::class);
 
-        // Add some other bundles we depend on
-        $kernel->addBundle(FrameworkBundle::class);
-        $kernel->addBundle(DoctrineBundle::class);
-        $kernel->addBundle(SecurityBundle::class);
 
-        // Boot the kernel.
-        $this->bootKernel();
+            // Add some configuration
+            $kernel->addTestConfig(__DIR__.'/config.yml');
+        }]);
 
         // Get the container
-        $container = $this->getContainer();
+        // $container = $kernel->getContainer();
 
-        // Test if you services exists
+        // Or for FrameworkBundle@^5.3.6 to access private services without the PublicCompilerPass
+        $container = self::getContainer();
+
+
+        // Test if your services exists
         $services = [
             'kikwik_user.event_subscriber.login_subscriber' => LoginSubscriber::class,
             'kikwik_user.security.user_checker' => UserChecker::class,
@@ -61,9 +74,9 @@ class BundleInitializationTest extends BaseBundleTestCase
         ];
         foreach($services as $serviceId => $serviceClass)
         {
-            $this->assertTrue($container->has($serviceId),'Container has '.$serviceId);
+            $this->assertTrue($container->has($serviceId),'Container must have '.$serviceId);
             $service = $container->get($serviceId);
-            $this->assertInstanceOf($serviceClass, $service, 'Service '.$serviceId.' is instance of '.$serviceClass);
+            $this->assertInstanceOf($serviceClass, $service, 'Service '.$serviceId.' must be an instance of '.$serviceClass);
         }
     }
 
