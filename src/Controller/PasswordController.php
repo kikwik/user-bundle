@@ -19,12 +19,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class PasswordController extends AbstractController
 {
 
-    private $userClass;
-
-    private $userIdentifierField;
-
-    private $userEmailField;
-
     private $entityManager;
 
     private $passwordHasher;
@@ -32,6 +26,12 @@ class PasswordController extends AbstractController
     private $translator;
 
     private $mailer;
+
+    private $userClass;
+
+    private $userIdentifierField;
+
+    private $userEmailField;
 
     private $passwordMinLength;
     /**
@@ -43,15 +43,16 @@ class PasswordController extends AbstractController
      */
     private $senderName;
 
-    public function __construct(string $userClass, string $userIdentifierField, ?string $userEmailField, int $passwordMinLength, ?string $senderEmail, ?string $senderName, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, TranslatorInterface $translator, MailerInterface $mailer)
+    public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, TranslatorInterface $translator, MailerInterface $mailer, string $userClass, string $userIdentifierField, ?string $userEmailField, int $passwordMinLength, ?string $senderEmail, ?string $senderName)
     {
-        $this->userClass = $userClass;
-        $this->userIdentifierField = $userIdentifierField;
-        $this->userEmailField = $userEmailField;
         $this->entityManager = $entityManager;
         $this->passwordHasher = $passwordHasher;
         $this->translator = $translator;
         $this->mailer = $mailer;
+
+        $this->userClass = $userClass;
+        $this->userIdentifierField = $userIdentifierField;
+        $this->userEmailField = $userEmailField;
         $this->passwordMinLength = $passwordMinLength;
         $this->senderEmail = $senderEmail;
         $this->senderName = $senderName;

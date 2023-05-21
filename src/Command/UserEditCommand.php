@@ -18,9 +18,9 @@ class UserEditCommand extends BaseCommand
     private $passwordHasher;
 
 
-    public function __construct(string $userClass, string $userIdentifierField, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher)
+    public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, string $userClass, string $userIdentifierField)
     {
-        parent::__construct($userClass, $userIdentifierField, $entityManager);
+        parent::__construct($entityManager, $userClass, $userIdentifierField);
         $this->passwordHasher = $passwordHasher;
     }
 

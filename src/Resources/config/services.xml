@@ -17,12 +17,6 @@
 
     <!-- PasswordController -->
     <service id="kikwik_user.controller.password_controller" class="Kikwik\UserBundle\Controller\PasswordController" public="true">
-      <argument>%kikwik_user.user_class%</argument>
-      <argument>%kikwik_user.user_identifier_field%</argument>
-      <argument>%kikwik_user.user_email_field%</argument>
-      <argument>%kikwik_user.password_min_length%</argument>
-      <argument>%kikwik_user.sender_email%</argument>
-      <argument>%kikwik_user.sender_name%</argument>
       <argument type="service" id="doctrine.orm.entity_manager" />
       <argument type="service" id="security.user_password_hasher" />
       <argument type="service" id="translator" />
@@ -34,8 +28,6 @@
 
     <!-- UserCreateCommand -->
     <service id="kikwik_user.command.user_create_command" class="Kikwik\UserBundle\Command\UserCreateCommand">
-      <argument>%kikwik_user.user_class%</argument>
-      <argument>%kikwik_user.user_identifier_field%</argument>
       <argument type="service" id="doctrine.orm.entity_manager" />
       <argument type="service" id="security.user_password_hasher" />
       <tag name="console.command" command="kikwik:user:create" />
@@ -43,16 +35,12 @@
 
     <!-- UserDeleteCommand -->
     <service id="kikwik_user.command.user_delete_command" class="Kikwik\UserBundle\Command\UserDeleteCommand">
-      <argument>%kikwik_user.user_class%</argument>
-      <argument>%kikwik_user.user_identifier_field%</argument>
       <argument type="service" id="doctrine.orm.entity_manager" />
       <tag name="console.command" command="kikwik:user:delete" />
     </service>
 
     <!-- UserEditCommand -->
     <service id="kikwik_user.command.user_edit_command" class="Kikwik\UserBundle\Command\UserEditCommand">
-      <argument>%kikwik_user.user_class%</argument>
-      <argument>%kikwik_user.user_identifier_field%</argument>
       <argument type="service" id="doctrine.orm.entity_manager" />
       <argument type="service" id="security.user_password_hasher" />
       <tag name="console.command" command="kikwik:user:edit" />

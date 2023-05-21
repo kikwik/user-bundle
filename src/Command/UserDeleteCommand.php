@@ -39,6 +39,10 @@ class UserDeleteCommand extends BaseCommand
         $username = $input->getArgument('username');
 
         $user = $this->entityManager->getRepository($this->userClass)->findOneBy([$this->userIdentifierField => $username]);
+        if(!$user)
+        {
+            throw new \RuntimeException('User '.$username.' does not exists');
+        }
 
         if($io->askQuestion(new ConfirmationQuestion('Are you sure?', false)))
         {

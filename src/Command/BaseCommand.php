@@ -13,6 +13,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 abstract class BaseCommand extends Command 
 {
     /**
+     * @var \Doctrine\ORM\EntityManagerInterface
+     */
+    protected $entityManager;
+
+    /**
      * @var string
      */
     protected $userClass;
@@ -22,12 +27,7 @@ abstract class BaseCommand extends Command
      */
     protected $userIdentifierField;
 
-    /**
-     * @var \Doctrine\ORM\EntityManagerInterface
-     */
-    protected $entityManager;
-
-    public function __construct(string $userClass, string $userIdentifierField, EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, string $userClass, string $userIdentifierField)
     {
         parent::__construct();
         $this->userClass = $userClass;
@@ -94,6 +94,10 @@ abstract class BaseCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $user = $this->entityManager->getRepository($this->userClass)->findOneBy([$this->userIdentifierField => $input->getArgument('username')]);
+        if(!$user)
+        {
+            throw new \RuntimeException('User '.$input->getArgument('username').' does not exists');
+        }
 
         $input->setOption('roles',$io->ask('Please enter the new user roles'."\n".' * leave blank if you don\'t want to change it'."\n".' * enter a comma separated list'."\n".' * enter ROLE_USER to delete all extra roles'."\n",implode(', ',$user->getRoles())));
     }
