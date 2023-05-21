@@ -1,9 +1,7 @@
 KikwikUserBundle
 =================
 
-A super simple user bundle that provide very basic helpers for symfony 4 user management.
-
-WARNING: this bundle is still under development! do not use it!
+A super simple user bundle that provide very basic helpers for symfony 5.3 and 6.x user management.
 
 
 Installation
@@ -139,25 +137,4 @@ request_password:
             </p>
 ```
 
-### Sonata admin ###
 
-If Sonata Admin is installed you can use some helpers (change password handler and getRoleHierarchy) from `SonataUserAdminTrait`
-
-```php
-use Kikwik\UserBundle\Traits\SonataUserAdminTrait;
-
-final class UserAdmin extends AbstractAdmin
-{
-    use SonataUserAdminTrait;
-
-    //...
-}
-```
-
-Update sonata config files `config/packages/sonata_admin.yaml` to use some templates:
-
-```yaml
-sonata_admin:
-    templates:
-        user_block: '@KikwikUser/SonataAdmin/Core/user_block.html.twig'
-```
