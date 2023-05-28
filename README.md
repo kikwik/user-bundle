@@ -150,39 +150,73 @@ when@test:
 ```
 
 
-Use the `KikwikUserContextTrait` in your behat context and initialize a `ContainerInterface $driverContainer` variable
+Use the `KikwikUserContextTrait` in your behat context and autowire these services in the constructor:
+- `ContainerInterface $driverContainer`
+- `EntityManagerInterface $entityManager`
+- `UserPasswordHasherInterface $passwordHasher`
 
 ```php
+declare(strict_types=1);
+
 namespace App\Tests\Behat;
 
 use Behat\Behat\Context\Context;
 use Behat\MinkExtension\Context\MinkContext;
+use Doctrine\Common\DataFixtures\Purger\ORMPurger;
+use Doctrine\ORM\EntityManagerInterface;
 use Kikwik\UserBundle\Behat\KikwikUserContextTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-
-final class DemoContext extends MinkContextntext implements Context
+/**
+ * This context class contains the definitions of the steps used by the demo
+ * feature file. Learn how to get started with Behat and BDD on Behat's website.
+ *
+ * @see http://behat.org/en/latest/quick_start.html
+ */
+final class DefaultContext extends MinkContext implements Context
 {
-    use KikwikUserContextTraittTrait;
+    use KikwikUserContextTrait;
 
     /** @var KernelInterface */
     private $kernel;
-    
-    /**
-     * @var ContainerInterface
-     */
-    private $driverContainer;
 
-    public function __construct(KernelInterface $kernel, ContainerInterface $driverContainer)
+    /** @var Response|null */
+    private $response;
+
+    private ContainerInterface $driverContainer;
+    private EntityManagerInterface $entityManager;
+    private UserPasswordHasherInterface $passwordHasher;
+
+    public function __construct(KernelInterface $kernel, ContainerInterface $driverContainer, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher)
     {
         $this->kernel = $kernel;
         $this->driverContainer = $driverContainer;
+        $this->entityManager = $entityManager;
+        $this->passwordHasher = $passwordHasher;
     }
+
+    /**
+     * @BeforeScenario
+     */
+    public function clearData()
+    {
+        $connection = $this->entityManager->getConnection();
+        $connection->executeQuery('SET FOREIGN_KEY_CHECKS=0');
+
+        $purger = new ORMPurger($this->entityManager);
+        $purger->setPurgeMode(ORMPurger::PURGE_MODE_TRUNCATE);
+        $purger->purge();
+
+        $connection->executeQuery('SET FOREIGN_KEY_CHECKS=1');
+    }
+
 }
 ```
 
-Create a feature file to test the reset password:
+Create a feature file to test the reset password in `features/password-request-reset.feature`:
 
 ```yaml
 Feature:
@@ -191,7 +225,7 @@ Feature:
     I want to be able to reset password
 
     Background:
-        Given There is a user with email "test@example.com"
+        Given There is a user "test@example.com" with password "change-me" and "ROLE_USER" roles
 
     Scenario: Login page has the forgot password link
         When I go to "/login"

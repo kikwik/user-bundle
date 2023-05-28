@@ -14,6 +14,54 @@ trait KikwikUserContextTrait
         return 'App\Entity\User';
     }
 
+    /**
+     * @Given There is a user :userIdentifier with password :userPassword and :userRoles roles
+     */
+    public function thereIsAUserWithPasswordAndRole($userIdentifier, $userPassword, $userRoles)
+    {
+        $userClass = $this->getUserClass();
+        $user = $this->entityManager->getRepository($userClass)->findOneByEmail($userIdentifier);
+        if(!$user)
+        {
+            $user = new $userClass();
+            $user->setEmail($userIdentifier);
+        }
+        $user->setPassword($this->passwordHasher->hashPassword($user,$userPassword));
+        $user->setRoles(array_map('trim', explode(',', $userRoles)));
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @Given I am authenticated as :userIdentifier with password :userPassword
+     */
+    public function iAmAuthenticatedAsWithPassword($userIdentifier, $userPassword)
+    {
+        $this->visitPath('/login');
+        $this->getSession()->getPage()->fillField('Email', $userIdentifier);
+        $this->getSession()->getPage()->fillField('Password', $userPassword);
+        $this->getSession()->getPage()->pressButton('Accedi');
+        $this->assertPageNotContainsText('Credenziali non valide.');
+    }
+
+
+    /**
+     * @When I follow the password reset link for user :email
+     */
+    public function iFollowThePasswordResetLinkForUser($email)
+    {
+        $userClass = $this->getUserClass();
+
+        $user = $this->entityManager->getRepository($userClass)->findOneBy(['email'=>$email]);
+        $this->entityManager->refresh($user);
+        if(!$user)
+        {
+            $message = 'User with email "'.$email.'" not found';
+            throw new ExpectationException($message, $this->getSession()->getDriver());
+        }
+        $this->visit(sprintf('/password/reset/%s/%s',$email, $user->getChangePasswordSecret()));
+    }
+
     protected function getSymfonyProfiler()
     {
         return $this->driverContainer->get('profiler');
@@ -67,37 +115,5 @@ trait KikwikUserContextTrait
     }
 
 
-    /**
-     * @Given There is a user with email :email
-     */
-    public function thereIsAUserWithEmail($email)
-    {
-        $em = $this->kernel->getContainer()->get('doctrine.orm.entity_manager');
-        $userClass = $this->getUserClass();
-
-        $user = new $userClass();
-        $user->setEmail($email);
-        $user->setPassword('change me');
-        $em->persist($user);
-        $em->flush();
-    }
-
-    /**
-     * @When I follow the password reset link for user :email
-     */
-    public function iFollowThePasswordResetLinkForUser($email)
-    {
-        $em = $this->kernel->getContainer()->get('doctrine.orm.entity_manager');
-        $userClass = $this->getUserClass();
-
-        $user = $em->getRepository($userClass)->findOneBy(['email'=>$email]);
-        $em->refresh($user);
-        if(!$user)
-        {
-            $message = 'User with email "'.$email.'" not found';
-            throw new ExpectationException($message, $this->getSession()->getDriver());
-        }
-        $this->visit(sprintf('/password/reset/%s/%s',$email, $user->getChangePasswordSecret()));
-    }
 
 }
