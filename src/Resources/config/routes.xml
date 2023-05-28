@@ -7,21 +7,21 @@
   <route
       id="kikwik_user_password_change"
       path="/change"
-      controller="kikwik_user.controller.password_controller:changePassword"
+      controller="kikwik_user.controller.password_controller::changePassword"
       methods="GET,POST"
   />
 
   <route
       id="kikwik_user_password_request"
       path="/request"
-      controller="kikwik_user.controller.password_controller:requestPassword"
+      controller="kikwik_user.controller.password_controller::requestPassword"
       methods="GET,POST"
   />
 
   <route
       id="kikwik_user_password_reset"
       path="/reset/{userIdentifier}/{secretCode}"
-      controller="kikwik_user.controller.password_controller:resetPassword"
+      controller="kikwik_user.controller.password_controller::resetPassword"
       methods="GET,POST"
   />
 </routes>

@@ -20,12 +20,12 @@ class RequestPasswordFormType extends AbstractType
             ));
     }
 
-
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'translation_domain' => 'KikwikUserBundle',
             'askForEmail' => true,
+            'attr' => ['data-test'=>'request-password-form'],
         ]);
     }
 }

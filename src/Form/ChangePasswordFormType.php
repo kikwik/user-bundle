@@ -31,6 +31,7 @@ class ChangePasswordFormType extends AbstractType
         $resolver->setDefaults([
             'translation_domain' => 'KikwikUserBundle',
             'password_min_length' => 8,
+            'attr' => ['data-test'=>'change-password-form'],
         ]);
     }
 

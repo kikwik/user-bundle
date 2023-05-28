@@ -84,7 +84,7 @@ SENDER_NAME="My Company Name"
 
 
 Features
-------------
+--------
 
 ### Disable user access ###
 
@@ -138,3 +138,91 @@ request_password:
 ```
 
 
+Behat
+-----
+
+Enable the profiler for the test environment in `config/packages/web_profiler.yaml`:
+
+```yaml
+when@test:
+    framework:
+        profiler: { collect: true }
+```
+
+
+Use the `KikwikUserContextTrait` in your behat context and initialize a `ContainerInterface $driverContainer` variable
+
+```php
+namespace App\Tests\Behat;
+
+use Behat\Behat\Context\Context;
+use Behat\MinkExtension\Context\MinkContext;
+use Kikwik\UserBundle\Behat\KikwikUserContextTrait;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
+
+
+final class DemoContext extends MinkContextntext implements Context
+{
+    use KikwikUserContextTraittTrait;
+
+    /** @var KernelInterface */
+    private $kernel;
+    
+    /**
+     * @var ContainerInterface
+     */
+    private $driverContainer;
+
+    public function __construct(KernelInterface $kernel, ContainerInterface $driverContainer)
+    {
+        $this->kernel = $kernel;
+        $this->driverContainer = $driverContainer;
+    }
+}
+```
+
+Create a feature file to test the reset password:
+
+```yaml
+Feature:
+    In order to manage private access to site
+    As a user
+    I want to be able to reset password
+
+    Background:
+        Given There is a user with email "test@example.com"
+
+    Scenario: Login page has the forgot password link
+        When I go to "/login"
+        Then I should see a "a[href='/password/request']" element
+
+    Scenario: Request password
+        # try a wrog login
+        When I go to "/login"
+        And I fill in "inputEmail" with "test@example.com"
+        And I fill in "inputPassword" with "mySecterPassword"
+        And I press "Sign in"
+        Then I should see "Credenziali non valide."
+        # request a new password
+        When I go to "/password/request"
+        Then I should see a "[data-test='request-password-form']" element
+        When I fill in "request_password_form_userIdentifier" with "test@example.com"
+        And I press "request-password-submit"
+        Then I should see an ".alert.alert-success.request_password" element
+        # check that email was sent
+        And the reset password mail was sent to "test@example.com"
+        # reset password
+        When I follow the password reset link for user "test@example.com"
+        Then I should see a "[data-test='change-password-form']" element
+        When I fill in "change_password_form_newPassword_first" with "mySecterPassword"
+        And I fill in "change_password_form_newPassword_second" with "mySecterPassword"
+        And I press "reset-password-submit"
+        Then I should see an ".alert.alert-success.reset_password" element
+        # try the login
+        When I go to "/login"
+        And I fill in "inputEmail" with "test@example.com"
+        And I fill in "inputPassword" with "mySecterPassword"
+        And I press "Sign in"
+        Then I should not see "Credenziali non valide."
+```

@@ -14,6 +14,8 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PasswordController extends AbstractController
@@ -42,6 +44,8 @@ class PasswordController extends AbstractController
      * @var string
      */
     private $senderName;
+
+
 
     public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, TranslatorInterface $translator, MailerInterface $mailer, string $userClass, string $userIdentifierField, ?string $userEmailField, int $passwordMinLength, ?string $senderEmail, ?string $senderName)
     {
@@ -80,7 +84,7 @@ class PasswordController extends AbstractController
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
-            $this->addFlash('success',$this->translator->trans('change_password.flash.success',[],'KikwikUserBundle'));
+            $this->addFlash('success change_password',$this->translator->trans('change_password.flash.success',[],'KikwikUserBundle'));
             $returnUrl = $this->removeReferer($session);
             return new RedirectResponse($returnUrl);
         }
@@ -215,7 +219,7 @@ class PasswordController extends AbstractController
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
 
-                $this->addFlash('success',$this->translator->trans('reset_password.flash.success',[],'KikwikUserBundle'));
+                $this->addFlash('success reset_password',$this->translator->trans('reset_password.flash.success',[],'KikwikUserBundle'));
                 $returnUrl = $this->removeReferer($session);
                 return new RedirectResponse($returnUrl);
             }
