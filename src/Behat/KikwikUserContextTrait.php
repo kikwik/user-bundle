@@ -38,9 +38,9 @@ trait KikwikUserContextTrait
     public function iAmAuthenticatedAsWithPassword($userIdentifier, $userPassword)
     {
         $this->visitPath('/login');
-        $this->getSession()->getPage()->fillField('Email', $userIdentifier);
-        $this->getSession()->getPage()->fillField('Password', $userPassword);
-        $this->getSession()->getPage()->pressButton('Accedi');
+        $this->getSession()->getPage()->fillField('email', $userIdentifier);
+        $this->getSession()->getPage()->fillField('password', $userPassword);
+        $this->getSession()->getPage()->pressButton('login-submit');
         $this->assertPageNotContainsText('Credenziali non valide.');
     }
 

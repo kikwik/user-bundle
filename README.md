@@ -141,6 +141,31 @@ request_password:
 Behat
 -----
 
+Require behat and dependencies: 
+
+```console
+$ composer require friends-of-behat/mink-extension friends-of-behat/mink-browserkit-driver friends-of-behat/symfony-extension doctrine/doctrine-fixtures-bundle --dev
+```
+
+Configure behat extensions in `behat.yml.dist`:
+
+```yaml
+default:
+    suites:
+        default:
+            contexts:
+                - App\Tests\Behat\DefaultContext
+
+    extensions:
+        FriendsOfBehat\SymfonyExtension:
+            bootstrap: tests/bootstrap.php
+        Behat\MinkExtension:
+            base_url: http://my-dev-url.local/
+            default_session: symfony
+            symfony: ~
+            show_cmd: firefox %s
+```
+
 Enable the profiler for the test environment in `config/packages/web_profiler.yaml`:
 
 ```yaml
@@ -154,6 +179,7 @@ Use the `KikwikUserContextTrait` in your behat context and autowire these servic
 - `ContainerInterface $driverContainer`
 - `EntityManagerInterface $entityManager`
 - `UserPasswordHasherInterface $passwordHasher`
+
 
 ```php
 declare(strict_types=1);
@@ -216,6 +242,14 @@ final class DefaultContext extends MinkContext implements Context
 }
 ```
 
+In your `templates/security/login.html.twig` template give `name="login-submit"` to the login submit button
+
+```html
+<button class="btn btn-lg btn-primary" type="submit" name="login-submit">
+    Sign in
+</button>
+```
+
 Create a feature file to test the reset password in `features/password-request-reset.feature`:
 
 ```yaml
@@ -227,16 +261,43 @@ Feature:
     Background:
         Given There is a user "test@example.com" with password "change-me" and "ROLE_USER" roles
 
+    Scenario: Change password should be protected
+        When I go to "/password/change"
+        Then the response status code should be 200
+        And I should not see a "[data-test='change-password-form']" element
+
+    Scenario: Change password
+        # auth with old password
+        When I am authenticated as "test@example.com" with password "change-me"
+        # change password
+        And I go to "/password/change"
+        Then I should see a "[data-test='change-password-form']" element
+        When I fill in "change_password_form_newPassword_first" with "myNewPassword"
+        And I fill in "change_password_form_newPassword_second" with "myNewPassword"
+        And I press "change-password-submit"
+        Then I should see a ".alert.alert-success.change_password" element
+        # logout
+        When I go to "logout"
+        # re-auth with new password
+        And I am authenticated as "test@example.com" with password "myNewPassword"
+        Then I should not see "Credenziali non valide."
+
+    Scenario: Request password should not be protected
+        When I go to "/password/request"
+        Then the response status code should be 200
+        And I should see a "[data-test='request-password-form']" element
+
     Scenario: Login page has the forgot password link
         When I go to "/login"
-        Then I should see a "a[href='/password/request']" element
+        Then the response status code should be 200
+        And I should see a "a[href='/password/request']" element
 
     Scenario: Request password
         # try a wrog login
         When I go to "/login"
-        And I fill in "inputEmail" with "test@example.com"
-        And I fill in "inputPassword" with "mySecterPassword"
-        And I press "Sign in"
+        And I fill in "email" with "test@example.com"
+        And I fill in "password" with "mySecterPassword"
+        And I press "login-submit"
         Then I should see "Credenziali non valide."
         # request a new password
         When I go to "/password/request"
@@ -255,8 +316,8 @@ Feature:
         Then I should see an ".alert.alert-success.reset_password" element
         # try the login
         When I go to "/login"
-        And I fill in "inputEmail" with "test@example.com"
-        And I fill in "inputPassword" with "mySecterPassword"
-        And I press "Sign in"
+        And I fill in "email" with "test@example.com"
+        And I fill in "password" with "mySecterPassword"
+        And I press "login-submit"
         Then I should not see "Credenziali non valide."
 ```
