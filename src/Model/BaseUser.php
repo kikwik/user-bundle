@@ -28,7 +28,7 @@ abstract class BaseUser implements UserInterface
 
     public function __toString()
     {
-        return (string) $this->getUsername();
+        return $this->getUserIdentifier();
     }
 
     public function getRolesAsLabel()
@@ -39,6 +39,20 @@ abstract class BaseUser implements UserInterface
     public function getRolesAsBadges()
     {
         return $this->buildRoleString('badge');
+    }
+
+    public function addRole($newRole)
+    {
+        $roles = $this->getRoles();
+        $roles[] = $newRole;
+        $this->setRoles(array_unique($roles));
+    }
+
+    public function removeRole($oldRole)
+    {
+        $roles = $this->getRoles();
+        $roles = array_diff($roles, [$oldRole]);
+        $this->setRoles(array_unique($roles));
     }
 
     protected function getRoleClass($role)
