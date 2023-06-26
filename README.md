@@ -250,7 +250,9 @@ In your `templates/security/login.html.twig` template give `name="login-submit"`
 </button>
 ```
 
-Create a feature file to test the reset password in `features/password-request-reset.feature`:
+Create a feature file to test the reset password in `features/password-request-reset.feature`
+
+Example with `email` as `userIdentifier`:
 
 ```yaml
 Feature:
@@ -267,19 +269,15 @@ Feature:
         And I should not see a "[data-test='change-password-form']" element
 
     Scenario: Change password
-        # auth with old password
-        When I am authenticated as "test@example.com" with password "change-me"
-        # change password
+        When I am authenticated with "test@example.com" as "email" and password "change-me"
         And I go to "/password/change"
         Then I should see a "[data-test='change-password-form']" element
         When I fill in "change_password_form_newPassword_first" with "myNewPassword"
         And I fill in "change_password_form_newPassword_second" with "myNewPassword"
         And I press "change-password-submit"
         Then I should see a ".alert.alert-success.change_password" element
-        # logout
         When I go to "logout"
-        # re-auth with new password
-        And I am authenticated as "test@example.com" with password "myNewPassword"
+        And I am authenticated with "test@example.com" as "email" and password "myNewPassword"
         Then I should not see "Credenziali non valide."
 
     Scenario: Request password should not be protected
@@ -303,6 +301,80 @@ Feature:
         When I go to "/password/request"
         Then I should see a "[data-test='request-password-form']" element
         When I fill in "request_password_form_userIdentifier" with "test@example.com"
+        And I press "request-password-submit"
+        Then I should see an ".alert.alert-success.request_password" element
+        # check that email was sent
+        And the reset password mail was sent to "test@example.com"
+        # reset password
+        When I follow the password reset link for user "test@example.com"
+        Then I should see a "[data-test='change-password-form']" element
+        When I fill in "change_password_form_newPassword_first" with "mySecterPassword"
+        And I fill in "change_password_form_newPassword_second" with "mySecterPassword"
+        And I press "reset-password-submit"
+        Then I should see an ".alert.alert-success.reset_password" element
+        # try the login
+        When I go to "/login"
+        And I fill in "email" with "test@example.com"
+        And I fill in "password" with "mySecterPassword"
+        And I press "login-submit"
+        Then I should not see "Credenziali non valide."
+```
+
+
+Example with `username` as `userIdentifier`:
+
+
+```yaml
+Feature:
+    In order to manage private access to site
+    As a user
+    I want to be able to reset password
+
+    Background:
+        Given There is a user "testUser" with email "test@example.com" and password "change-me" and "ROLE_USER" roles
+
+    Scenario: Change password should be protected
+        When I go to "/password/change"
+        Then the response status code should be 200
+        And I should not see a "[data-test='change-password-form']" element
+
+    Scenario: Change password
+        # auth with old password
+        When I am authenticated with "testUser" as "username" and password "change-me"
+        # change password
+        And I go to "/password/change"
+        Then I should see a "[data-test='change-password-form']" element
+        When I fill in "change_password_form_newPassword_first" with "myNewPassword"
+        And I fill in "change_password_form_newPassword_second" with "myNewPassword"
+        And I press "change-password-submit"
+        Then I should see a ".alert.alert-success.change_password" element
+        # logout
+        When I go to "logout"
+        # re-auth with new password
+        And I am authenticated with "testUser" as "username" and password "myNewPassword"
+        Then I should not see "Credenziali non valide."
+
+    Scenario: Request password should not be protected
+        When I go to "/password/request"
+        Then the response status code should be 200
+        And I should see a "[data-test='request-password-form']" element
+
+    Scenario: Login page has the forgot password link
+        When I go to "/login"
+        Then the response status code should be 200
+        And I should see a "a[href='/password/request']" element
+
+    Scenario: Request password
+        # try a wrog login
+        When I go to "/login"
+        And I fill in "username" with "testUser"
+        And I fill in "password" with "mySecterPassword"
+        And I press "login-submit"
+        Then I should see "Credenziali non valide."
+        # request a new password
+        When I go to "/password/request"
+        Then I should see a "[data-test='request-password-form']" element
+        When I fill in "request_password_form_userIdentifier" with "testUser"
         And I press "request-password-submit"
         Then I should see an ".alert.alert-success.request_password" element
         # check that email was sent

@@ -18,6 +18,10 @@
     <!-- PasswordController -->
     <service id="kikwik_user.controller.password_controller" class="Kikwik\UserBundle\Controller\PasswordController" public="true">
       <argument type="service" id="doctrine.orm.entity_manager" />
+      <argument type="service" id="security.authorization_checker"/>
+      <argument type="service" id="form.factory"/>
+      <argument type="service" id="twig"/>
+      <argument type="service" id="security.token_storage"/>
       <argument type="service" id="security.user_password_hasher" />
       <argument type="service" id="translator" />
       <argument type="service" id="mailer.mailer" />

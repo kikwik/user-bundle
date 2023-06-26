@@ -15,16 +15,16 @@ trait KikwikUserContextTrait
     }
 
     /**
-     * @Given There is a user :userIdentifier with password :userPassword and :userRoles roles
+     * @Given There is a user :userEmail with password :userPassword and :userRoles roles
      */
-    public function thereIsAUserWithPasswordAndRole($userIdentifier, $userPassword, $userRoles)
+    public function thereIsAUserWithPasswordAndRole($userEmail, $userPassword, $userRoles)
     {
         $userClass = $this->getUserClass();
-        $user = $this->entityManager->getRepository($userClass)->findOneByEmail($userIdentifier);
+        $user = $this->entityManager->getRepository($userClass)->findOneByEmail($userEmail);
         if(!$user)
         {
             $user = new $userClass();
-            $user->setEmail($userIdentifier);
+            $user->setEmail($userEmail);
         }
         $user->setPassword($this->passwordHasher->hashPassword($user,$userPassword));
         $user->setRoles(array_map('trim', explode(',', $userRoles)));
@@ -33,16 +33,36 @@ trait KikwikUserContextTrait
     }
 
     /**
-     * @Given I am authenticated as :userIdentifier with password :userPassword
+     * @Given There is a user :userIdentifier with email :userEmail and password :userPassword and :userRoles roles
      */
-    public function iAmAuthenticatedAsWithPassword($userIdentifier, $userPassword)
+    public function thereIsAUserWithEmailAndPasswordAndRoles($userIdentifier, $userEmail, $userPassword, $userRoles)
+    {
+        $userClass = $this->getUserClass();
+        $user = $this->entityManager->getRepository($userClass)->findOneByUsername($userIdentifier);
+        if(!$user)
+        {
+            $user = new $userClass();
+            $user->setUsername($userIdentifier);
+        }
+        $user->setEmail($userEmail);
+        $user->setPassword($this->passwordHasher->hashPassword($user,$userPassword));
+        $user->setRoles(array_map('trim', explode(',', $userRoles)));
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @When I am authenticated with :userIdentifier as :identifierFieldName and password :userPassword
+     */
+    public function iAmAuthenticatedWithAsAndPassword($userIdentifier, $identifierFieldName, $userPassword)
     {
         $this->visitPath('/login');
-        $this->getSession()->getPage()->fillField('email', $userIdentifier);
+        $this->getSession()->getPage()->fillField($identifierFieldName, $userIdentifier);
         $this->getSession()->getPage()->fillField('password', $userPassword);
         $this->getSession()->getPage()->pressButton('login-submit');
         $this->assertPageNotContainsText('Credenziali non valide.');
     }
+
 
 
     /**
@@ -110,7 +130,7 @@ trait KikwikUserContextTrait
         }
         if(!$emailFound)
         {
-            throw new ExpectationException('requestPassword email was not send', $this->getSession()->getDriver());
+            throw new ExpectationException('requestPassword email was not sent ('.count($messages).' sended)', $this->getSession()->getDriver());
         }
     }
 

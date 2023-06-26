@@ -7,6 +7,8 @@ use Kikwik\UserBundle\Form\ChangePasswordFormType;
 use Kikwik\UserBundle\Form\RequestPasswordFormType;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -14,42 +16,48 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\UsageTrackingTokenStorage;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment;
 
 class PasswordController extends AbstractController
 {
 
     private $entityManager;
-
+    private $authorizationChecker;
+    private $formFactory;
+    private $twig;
+    private $tokenStorage;
     private $passwordHasher;
-
     private $translator;
 
     private $mailer;
-
     private $userClass;
-
     private $userIdentifierField;
-
     private $userEmailField;
-
     private $passwordMinLength;
-    /**
-     * @var string
-     */
     private $senderEmail;
-    /**
-     * @var string
-     */
     private $senderName;
 
 
-
-    public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, TranslatorInterface $translator, MailerInterface $mailer, string $userClass, string $userIdentifierField, ?string $userEmailField, int $passwordMinLength, ?string $senderEmail, ?string $senderName)
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        AuthorizationCheckerInterface $authorizationChecker,
+        FormFactoryInterface $formFactory,
+        Environment $twig,
+        UsageTrackingTokenStorage $tokenStorage,
+        UserPasswordHasherInterface $passwordHasher,
+        TranslatorInterface $translator,
+        MailerInterface $mailer,
+        string $userClass, string $userIdentifierField, ?string $userEmailField, int $passwordMinLength, ?string $senderEmail, ?string $senderName)
     {
         $this->entityManager = $entityManager;
+        $this->authorizationChecker = $authorizationChecker;
+        $this->formFactory = $formFactory;
+        $this->twig = $twig;
+        $this->tokenStorage = $tokenStorage;
         $this->passwordHasher = $passwordHasher;
         $this->translator = $translator;
         $this->mailer = $mailer;
@@ -60,6 +68,36 @@ class PasswordController extends AbstractController
         $this->passwordMinLength = $passwordMinLength;
         $this->senderEmail = $senderEmail;
         $this->senderName = $senderName;
+    }
+
+    protected function isGranted($attribute, $subject = null): bool
+    {
+        return $this->authorizationChecker->isGranted($attribute, $subject);
+    }
+
+    protected function createForm(string $type, $data = null, array $options = []): FormInterface
+    {
+        return $this->formFactory->create($type, $data, $options);
+    }
+
+    protected function renderView(string $view, array $parameters = []): string
+    {
+        foreach ($parameters as $k => $v) {
+            if ($v instanceof FormInterface) {
+                $parameters[$k] = $v->createView();
+            }
+        }
+
+        return $this->twig->render($view, $parameters);
+    }
+
+    protected function getUser(): ?UserInterface
+    {
+        if (null === $token = $this->tokenStorage->getToken()) {
+            return null;
+        }
+
+        return $token->getUser();
     }
 
     public function changePassword(Request $request, SessionInterface $session)

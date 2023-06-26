@@ -51,7 +51,6 @@ class BundleInitializationTest extends KernelTestCase
             $kernel->addTestBundle(DoctrineBundle::class);
             $kernel->addTestBundle(SecurityBundle::class);
 
-
             // Add some configuration
             $kernel->addTestConfig(__DIR__.'/config.yml');
         }]);
