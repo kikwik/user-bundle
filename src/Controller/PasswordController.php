@@ -6,11 +6,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use Kikwik\UserBundle\Form\ChangePasswordFormType;
 use Kikwik\UserBundle\Form\RequestPasswordFormType;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
@@ -18,11 +19,12 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\UsageTrackingTokenStorage;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
-class PasswordController extends AbstractController
+class PasswordController
 {
 
     private $entityManager;
@@ -30,6 +32,8 @@ class PasswordController extends AbstractController
     private $formFactory;
     private $twig;
     private $tokenStorage;
+    private $urlGenerator;
+    private $session;
     private $passwordHasher;
     private $translator;
 
@@ -48,6 +52,8 @@ class PasswordController extends AbstractController
         FormFactoryInterface $formFactory,
         Environment $twig,
         UsageTrackingTokenStorage $tokenStorage,
+        UrlGeneratorInterface $urlGenerator,
+        RequestStack $requestStack,
         UserPasswordHasherInterface $passwordHasher,
         TranslatorInterface $translator,
         MailerInterface $mailer,
@@ -58,6 +64,8 @@ class PasswordController extends AbstractController
         $this->formFactory = $formFactory;
         $this->twig = $twig;
         $this->tokenStorage = $tokenStorage;
+        $this->urlGenerator = $urlGenerator;
+        $this->session = $requestStack->getSession();
         $this->passwordHasher = $passwordHasher;
         $this->translator = $translator;
         $this->mailer = $mailer;
@@ -70,35 +78,6 @@ class PasswordController extends AbstractController
         $this->senderName = $senderName;
     }
 
-    protected function isGranted($attribute, $subject = null): bool
-    {
-        return $this->authorizationChecker->isGranted($attribute, $subject);
-    }
-
-    protected function createForm(string $type, $data = null, array $options = []): FormInterface
-    {
-        return $this->formFactory->create($type, $data, $options);
-    }
-
-    protected function renderView(string $view, array $parameters = []): string
-    {
-        foreach ($parameters as $k => $v) {
-            if ($v instanceof FormInterface) {
-                $parameters[$k] = $v->createView();
-            }
-        }
-
-        return $this->twig->render($view, $parameters);
-    }
-
-    protected function getUser(): ?UserInterface
-    {
-        if (null === $token = $this->tokenStorage->getToken()) {
-            return null;
-        }
-
-        return $token->getUser();
-    }
 
     public function changePassword(Request $request, SessionInterface $session)
     {
@@ -122,7 +101,7 @@ class PasswordController extends AbstractController
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
-            $this->addFlash('success change_password',$this->translator->trans('change_password.flash.success',[],'KikwikUserBundle'));
+            $this->session->getFlashBag()->add('success change_password',$this->translator->trans('change_password.flash.success',[],'KikwikUserBundle'));
             $returnUrl = $this->removeReferer($session);
             return new RedirectResponse($returnUrl);
         }
@@ -138,7 +117,7 @@ class PasswordController extends AbstractController
         // check permission
         if($this->isGranted('ROLE_USER'))
         {
-            return $this->redirect($this->generateUrl('kikwik_user_password_change'));
+            return $this->redirect($this->urlGenerator->generate('kikwik_user_password_change'));
         }
 
         $askForEmail = $this->userIdentifierField == $this->userEmailField;
@@ -166,7 +145,7 @@ class PasswordController extends AbstractController
                 // check email configuration
                 if(!$this->userEmailField)
                 {
-                    $this->addFlash('danger',$this->translator->trans('request_password.flash.danger_no_email_configuration',[],'KikwikUserBundle'));
+                    $this->session->getFlashBag()->add('danger',$this->translator->trans('request_password.flash.danger_no_email_configuration',[],'KikwikUserBundle'));
                     return $this->redirectToRoute('kikwik_user_password_request');
                 }
 
@@ -175,7 +154,7 @@ class PasswordController extends AbstractController
                 $userEmail = $user->$emailGetter();
                 if(!$userEmail)
                 {
-                    $this->addFlash('danger',$this->translator->trans('request_password.flash.danger_no_email',[],'KikwikUserBundle'));
+                    $this->session->getFlashBag()->add('danger',$this->translator->trans('request_password.flash.danger_no_email',[],'KikwikUserBundle'));
                     return $this->redirectToRoute('kikwik_user_password_request');
                 }
 
@@ -184,7 +163,7 @@ class PasswordController extends AbstractController
                 }
                 catch (\Exception $e)
                 {
-                    $this->addFlash('danger',$this->translator->trans('request_password.flash.danger_email_not_valid',[],'KikwikUserBundle'));
+                    $this->session->getFlashBag()->add('danger',$this->translator->trans('request_password.flash.danger_email_not_valid',[],'KikwikUserBundle'));
                     return $this->redirectToRoute('kikwik_user_password_request');
                 }
 
@@ -204,19 +183,19 @@ class PasswordController extends AbstractController
                     ->subject($this->translator->trans('request_password.email.subject',[],'KikwikUserBundle'))
                     ->htmlTemplate('@KikwikUser/email/requestPassword.html.twig')
                     ->context([
-                        'reset_url' => $this->generateUrl('kikwik_user_password_reset',['userIdentifier'=>$userIdentifier,'secretCode'=>$secret],UrlGeneratorInterface::ABSOLUTE_URL),
+                        'reset_url' => $this->urlGenerator->generate('kikwik_user_password_reset',['userIdentifier'=>$userIdentifier,'secretCode'=>$secret],UrlGeneratorInterface::ABSOLUTE_URL),
                         'username' => $userIdentifier,
                     ])
                 ;
                 $this->mailer->send($email);
 
 
-                $this->addFlash('success request_password',$this->translator->trans('request_password.flash.success',[],'KikwikUserBundle'));
+                $this->session->getFlashBag()->add('success request_password',$this->translator->trans('request_password.flash.success',[],'KikwikUserBundle'));
                 return $this->redirectToRoute('kikwik_user_password_request');
             }
             else
             {
-                $this->addFlash('danger',$this->translator->trans('request_password.flash.danger_no_user',[],'KikwikUserBundle'));
+                $this->session->getFlashBag()->add('danger',$this->translator->trans('request_password.flash.danger_no_user',[],'KikwikUserBundle'));
                 return $this->redirectToRoute('kikwik_user_password_request');
             }
         }
@@ -257,7 +236,7 @@ class PasswordController extends AbstractController
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
 
-                $this->addFlash('success reset_password',$this->translator->trans('reset_password.flash.success',[],'KikwikUserBundle'));
+                $this->session->getFlashBag()->add('success reset_password',$this->translator->trans('reset_password.flash.success',[],'KikwikUserBundle'));
                 $returnUrl = $this->removeReferer($session);
                 return new RedirectResponse($returnUrl);
             }
@@ -278,8 +257,8 @@ class PasswordController extends AbstractController
         if(!$session->has('kikwik_user.password.referer'))
         {
             $forbiddenReferers = [
-                $this->generateUrl('kikwik_user_password_change',[],UrlGeneratorInterface::ABSOLUTE_URL),
-                $this->generateUrl('kikwik_user_password_request',[],UrlGeneratorInterface::ABSOLUTE_URL),
+                $this->urlGenerator->generate('kikwik_user_password_change',[],UrlGeneratorInterface::ABSOLUTE_URL),
+                $this->urlGenerator->generate('kikwik_user_password_request',[],UrlGeneratorInterface::ABSOLUTE_URL),
             ];
 
             $currentReferer = $request->headers->get('referer');
@@ -293,5 +272,71 @@ class PasswordController extends AbstractController
                 $session->set('kikwik_user.password.referer', '/');
             }
         }
+    }
+
+
+
+
+    /**************************************/
+    /* AbstractController helpers         */
+    /**************************************/
+
+    protected function isGranted($attribute, $subject = null): bool
+    {
+        return $this->authorizationChecker->isGranted($attribute, $subject);
+    }
+
+    protected function createForm(string $type, $data = null, array $options = []): FormInterface
+    {
+        return $this->formFactory->create($type, $data, $options);
+    }
+
+    protected function render(string $view, array $parameters = [], Response $response = null): Response
+    {
+        $content = $this->twig->render($view, $parameters);
+
+        if (null === $response) {
+            $response = new Response();
+        }
+
+        $response->setContent($content);
+
+        return $response;
+    }
+
+    protected function getUser(): ?UserInterface
+    {
+        if (null === $token = $this->tokenStorage->getToken()) {
+            return null;
+        }
+
+        return $token->getUser();
+    }
+
+    protected function denyAccessUnlessGranted($attribute, $subject = null, string $message = 'Access Denied.'): void
+    {
+        if (!$this->isGranted($attribute, $subject)) {
+            $exception = new AccessDeniedException($message);
+            $exception->setAttributes($attribute);
+            $exception->setSubject($subject);
+
+            throw $exception;
+        }
+    }
+
+    /**
+     * Returns a RedirectResponse to the given URL.
+     */
+    protected function redirect(string $url, int $status = 302): RedirectResponse
+    {
+        return new RedirectResponse($url, $status);
+    }
+
+    /**
+     * Returns a RedirectResponse to the given route with the given parameters.
+     */
+    protected function redirectToRoute(string $route, array $parameters = [], int $status = 302): RedirectResponse
+    {
+        return $this->redirect($this->urlGenerator->generate($route, $parameters), $status);
     }
 }
