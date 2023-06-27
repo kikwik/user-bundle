@@ -2,7 +2,7 @@
 
 namespace Kikwik\UserBundle\Behat;
 
-use Behat\Mink\Exception\ExpectationException;
+use PHPUnit\Framework\ExpectationFailedException;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Mailer\DataCollector\MessageDataCollector;
@@ -12,6 +12,11 @@ trait KikwikUserContextTrait
     protected function getUserClass()
     {
         return 'App\Entity\User';
+    }
+    
+    protected function getUserIdentifierField()
+    {
+        return 'email';
     }
 
     /**
@@ -52,12 +57,12 @@ trait KikwikUserContextTrait
     }
 
     /**
-     * @When I am authenticated with :userIdentifier as :identifierFieldName and password :userPassword
+     * @Given I am authenticated as :userIdentifier with password :userPassword
      */
-    public function iAmAuthenticatedWithAsAndPassword($userIdentifier, $identifierFieldName, $userPassword)
+    public function iAmAuthenticatedAsWithPassword($userIdentifier, $userPassword)
     {
         $this->visitPath('/login');
-        $this->getSession()->getPage()->fillField($identifierFieldName, $userIdentifier);
+        $this->getSession()->getPage()->fillField($this->getUserIdentifierField(), $userIdentifier);
         $this->getSession()->getPage()->fillField('password', $userPassword);
         $this->getSession()->getPage()->pressButton('login-submit');
         $this->assertPageNotContainsText('Credenziali non valide.');
@@ -66,20 +71,20 @@ trait KikwikUserContextTrait
 
 
     /**
-     * @When I follow the password reset link for user :email
+     * @When I follow the password reset link for user :userIdentifier
      */
-    public function iFollowThePasswordResetLinkForUser($email)
+    public function iFollowThePasswordResetLinkForUser($userIdentifier)
     {
         $userClass = $this->getUserClass();
 
-        $user = $this->entityManager->getRepository($userClass)->findOneBy(['email'=>$email]);
-        $this->entityManager->refresh($user);
+        $user = $this->entityManager->getRepository($userClass)->findOneBy([$this->getUserIdentifierField()=>$userIdentifier]);
         if(!$user)
         {
-            $message = 'User with email "'.$email.'" not found';
-            throw new ExpectationException($message, $this->getSession()->getDriver());
+            $message = 'User "'.$userIdentifier.'" not found';
+            throw new ExpectationFailedException($message);
         }
-        $this->visit(sprintf('/password/reset/%s/%s',$email, $user->getChangePasswordSecret()));
+        $this->entityManager->refresh($user);
+        $this->visit(sprintf('/password/reset/%s/%s',$userIdentifier, $user->getChangePasswordSecret()));
     }
 
     protected function getSymfonyProfiler()
@@ -102,14 +107,14 @@ trait KikwikUserContextTrait
         $tokens = $profiler->find('','',1, 'POST', $start, $end);
         if(!isset($tokens[0]['token']))
         {
-            throw new ExpectationException('No POST token found in the symfony profiler, did you forget to activate the "framework: profiler: { collect: true }" setting for the test environment?', $this->getSession()->getDriver());
+            throw new ExpectationFailedException('No POST token found in the symfony profiler, did you forget to activate the "framework: profiler: { collect: true }" setting for the test environment?');
         }
         $profilerInstance = $profiler->loadProfile($tokens[0]['token']);
 
         // Get the swiftmail collector
         if(!$profilerInstance->hasCollector('mailer'))
         {
-            throw new ExpectationException('"mailer" collector not found in symfony profiler', $this->getSession()->getDriver());
+            throw new ExpectationFailedException('"mailer" collector not found in symfony profiler');
         }
         /** @var MessageDataCollector $mailerCollector */
         $mailerCollector = $profilerInstance->getCollector('mailer');
@@ -122,7 +127,7 @@ trait KikwikUserContextTrait
         {
             if($message instanceof TemplatedEmail)
             {
-                if($message->getHtmlTemplate() == '@KikwikUser/email/requestPassword.html.twig')
+                if($message->getHeaders()->get('to')->getAddresses()[0]->getAddress() == $email)
                 {
                     $emailFound = true;
                 }
@@ -130,7 +135,7 @@ trait KikwikUserContextTrait
         }
         if(!$emailFound)
         {
-            throw new ExpectationException('requestPassword email was not sent ('.count($messages).' sended)', $this->getSession()->getDriver());
+            throw new ExpectationFailedException(sprintf('requestPassword email was not sent to %s',$email));
         }
     }
 
