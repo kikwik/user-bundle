@@ -457,7 +457,7 @@ Feature:
         Then I go to "/logout"
       # try login again (should not work)
         When I go to "/login"
-        And I fill in "email" with "test@example.com"
+        And I fill in "username" with "test@example.com"
         And I fill in "password" with "change-me"
         And I press "login-submit"
         Then I should see "Credenziali non valide."
