@@ -68,6 +68,22 @@ trait KikwikUserContextTrait
         $this->assertPageNotContainsText('Credenziali non valide.');
     }
 
+    /**
+     * @When user :userIdentifier is disabled
+     */
+    public function userIsDisabled($userIdentifier)
+    {
+        $userClass = $this->getUserClass();
+        $user = $this->entityManager->getRepository($userClass)->findOneBy([$this->getUserIdentifierField()=>$userIdentifier]);
+        if(!$user)
+        {
+            $message = 'User "'.$userIdentifier.'" not found';
+            throw new ExpectationFailedException($message);
+        }
+        $user->setIsEnabled(false);
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+    }
 
 
     /**
