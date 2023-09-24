@@ -365,6 +365,7 @@ Feature:
         And I fill in "password" with "mySecretPassword"
         And I press "login-submit"
         Then I should not see "Credenziali non valide."
+    
     Scenario: Disabled users can't login
       # try login (should work)  
         When I am authenticated as "test@example.com" with password "change-me"
@@ -450,6 +451,7 @@ Feature:
         And I fill in "password" with "mySecretPassword"
         And I press "login-submit"
         Then I should not see "Credenziali non valide."
+    
     Scenario: Disabled users can't login
       # try login (should work)  
         When I am authenticated as "testUser" with password "change-me"
