@@ -1,5 +1,35 @@
 # Changelog
 
+## v2.0.0 (2023-12-08)
+- min requirement php: >=8.1.0, symfony: ^6.4
+- removed kikwik/iptraceable-listener-bundle dependecy
+- added BaseUser::passwordChangedFromIp field 
+- last/previous login refactoring in BaseUser, new field names: lastLoginAt, lastLoginFromIp, previousLoginAt, previousLoginFromIp
+
+
+
+## v1.0.2 (2023-09-24)
+- symfony 6 in composer
+- add ORM attributes to BaseUser fields
+- auto-configuration of stof/doctrine-extensions-bundle
+- services parameter definition refactoring
+- set createdBy and updatedBy in kikwik:user:xxx commands
+- removed SonataUserAdminTrait
+- Behat context and example feature for testing password request and reset function
+- BaseUser::addRole() and BaseUser::removeRole()
+- PasswordController refactoring for symfony 6
+- removed AbstractController dependency from PasswordController
+- 
+
+## v0.2.2 (2022-05-29)
+- auto admin configuration
+
+## v0.2.1 (2022-04-03)
+- sender email and name as config parameters
+
+## v0.2.0 (2022-02-15)
+- drop support for symfony 4
+
 ## v0.1.4 (2021-07-17)
 - added support for symfony 5
 

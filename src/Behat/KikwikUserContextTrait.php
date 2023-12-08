@@ -4,7 +4,6 @@ namespace Kikwik\UserBundle\Behat;
 
 use PHPUnit\Framework\ExpectationFailedException;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Mailer\DataCollector\MessageDataCollector;
 
 trait KikwikUserContextTrait

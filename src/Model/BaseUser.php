@@ -196,14 +196,32 @@ abstract class BaseUser implements UserInterface
      * @ORM\Column(type="datetime", nullable=true)
      */
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    protected $lastLogin;
+    protected $lastLoginAt;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(length=45, nullable=true)
+     * @Gedmo\IpTraceable(on="change", field={"lastLoginAt"})
+     */
+    #[ORM\Column(length: 45, nullable: true)]
+    #[Gedmo\IpTraceable(on: 'change', field: ['lastLoginAt'])]
+    protected $lastLoginFromIp;
 
     /**
      * @var \DateTime|null
      * @ORM\Column(type="datetime", nullable=true)
      */
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    protected $previousLogin;
+    protected $previousLoginAt;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(length=45, nullable=true)
+     */
+    #[ORM\Column(length: 45, nullable: true)]
+    protected $previousLoginFromIp;
 
     /**
      * @var integer
@@ -215,15 +233,31 @@ abstract class BaseUser implements UserInterface
     /**
      * @return \DateTime|null
      */
-    public function getLastLogin(): ?\DateTime {
-        return $this->lastLogin;
+    public function getLastLoginAt(): ?\DateTime {
+        return $this->lastLoginAt;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLastLoginFromIp(): ?string
+    {
+        return $this->lastLoginFromIp;
     }
 
     /**
      * @return \DateTime|null
      */
-    public function getPreviousLogin(): ?\DateTime {
-        return $this->previousLogin;
+    public function getPreviousLoginAt(): ?\DateTime {
+        return $this->previousLoginAt;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPreviousLoginFromIp(): ?string
+    {
+        return $this->previousLoginFromIp;
     }
 
     /**
@@ -235,8 +269,9 @@ abstract class BaseUser implements UserInterface
 
     public function newLogin()
     {
-        $this->previousLogin = $this->lastLogin;
-        $this->lastLogin = new \DateTime();
+        $this->previousLoginAt = $this->lastLoginAt;
+        $this->previousLoginFromIp = $this->lastLoginFromIp;
+        $this->lastLoginAt = new \DateTime();
         $this->loginCount++;
     }
 

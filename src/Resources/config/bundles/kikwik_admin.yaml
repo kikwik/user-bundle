@@ -17,8 +17,10 @@ admins:
             roles:                      { label: Permessi, formType: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType', formTypeOptions: { multiple: true, expanded: true } }
             rolesAsBadges:              { label: Permessi, sortPath: false }
             loginCount:                 { label: '# login' }
-            previousLogin:              { label: Login precedente }
-            lastLogin:                  { label: Ultimo login }
+            previousLoginAt:            { label: Login precedente }
+            previousLoginFromIp:        { label: IP login precedente }
+            lastLoginAt:                { label: Ultimo login }
+            lastLoginFromIp:            { label: IP ultimo login }
             isEnabled:                  { label: Attivo }
             createdAt:                  { label: Data creazione }
             updatedAt:                  { label: Ultimo aggiornamento }
@@ -27,12 +29,12 @@ admins:
             createdFromIp:              { label: IP di creazione }
             updatedFromIp:              { label: IP di modifica }
         collection:
-            display:      [ email, rolesAsBadges, createdAt, isEnabled, loginCount, lastLogin ]
+            display:      [ email, rolesAsBadges, createdAt, isEnabled, loginCount, lastLoginAt ]
             quickSearch:  [ email, roles ]
             filters:      [ isEnabled, loginCount ]
-            export:       [ email, roles, isEnabled, loginCount, previousLogin, lastLogin, passwordChangedAt, passwordChangedFromIp, createdBy, createdFromIp, createdAt, updatedBy, updatedFromIp, updatedAt ]
+            export:       [ email, roles, isEnabled, loginCount, previousLoginAt, previousLoginFromIp, lastLoginAt, lastLoginFromIp, passwordChangedAt, passwordChangedFromIp, createdBy, createdFromIp, createdAt, updatedBy, updatedFromIp, updatedAt ]
         object:
-            display:  [ email, rolesAsBadges, isEnabled, loginCount, previousLogin, lastLogin, passwordChangedAt, passwordChangedFromIp ]
+            display:  [ email, rolesAsBadges, isEnabled, loginCount, previousLoginAt, previousLoginFromIp, lastLoginAt, lastLoginFromIp, passwordChangedAt, passwordChangedFromIp ]
             form:     [ email, isEnabled, plainPassword, roles ]
             actions:
                 impersonate: { label: impersonifica, icon: fas fa-user-secret, color: purple, methods: [ GET ], condition: { roles: [ ROLE_ALLOWED_TO_SWITCH ], method: isEnabled } }
@@ -40,5 +42,5 @@ admins:
                 row1: [
                     { title: Credenziali, class: col-lg-6, color: white, bgColor: green, style: table, fields: [ email, plainPassword, passwordChangedAt, passwordChangedFromIp ] }
                     { title: Permessi, class: col-lg-6, color: dark, bgColor: yellow, style: table, fields: [ isEnabled, roles ] }
-                    { title: Accessi, class: col-12, style: table, fields: [ loginCount, previousLogin, lastLogin ] }
+                    { title: Accessi, class: col-12, style: table, fields: [ loginCount, previousLoginAt, previousLoginFromIp, lastLoginAt, lastLoginFromIp ] }
                 ]
