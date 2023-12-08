@@ -11,14 +11,14 @@
         }
     ],
     "require": {
-        "php": ">=7.2.5",
-        "symfony/framework-bundle": "^5.3|^6.0",
-        "symfony/security-bundle": "^5.3|^6.0",
-        "symfony/translation": "^5.3|^6.0",
-        "symfony/mailer": "^5.3|^6.0",
-        "symfony/form": "^5.3|^6.0",
-        "symfony/validator": "^5.3|^6.0",
-        "symfony/twig-bundle": "^5.3|^6.0",
+        "php": ">=8.1.0",
+        "symfony/framework-bundle": "^6.4",
+        "symfony/security-bundle": "^6.4",
+        "symfony/translation": "^6.4",
+        "symfony/mailer": "^6.4",
+        "symfony/form": "^6.4",
+        "symfony/validator": "^6.4",
+        "symfony/twig-bundle": "^6.4",
         "doctrine/doctrine-bundle": "^2.0",
         "doctrine/orm": "^2.7",
         "stof/doctrine-extensions-bundle": "^1.6",
@@ -30,7 +30,7 @@
         }
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "^5.3|^6.0",
+        "symfony/phpunit-bridge": "^6.4",
         "nyholm/symfony-bundle-test": "^2.0"
     },
     "autoload-dev": {
