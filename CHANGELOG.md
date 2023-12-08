@@ -1,7 +1,7 @@
 # Changelog
 
 ## v2.0.0 (2023-12-08)
-- min requirement php: >=8.1.0, symfony: ^6.4
+- min requirement php: >=8.2.0, symfony: ^6.4
 - removed kikwik/iptraceable-listener-bundle dependecy
 - added BaseUser::passwordChangedFromIp field 
 - last/previous login refactoring in BaseUser, new field names: lastLoginAt, lastLoginFromIp, previousLoginAt, previousLoginFromIp
