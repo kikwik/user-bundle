@@ -10,7 +10,8 @@ admins:
         fields:
             email:                      { label: Email }
             plainPassword:              { label: Password, formType: 'Symfony\Component\Form\Extension\Core\Type\RepeatedType', formTypeOptions: { type: 'Symfony\Component\Form\Extension\Core\Type\PasswordType', invalid_message: 'Le due password devono essere uguali.', first_options: { label: 'Password', help: 'Lasciare vuoto per NON cambiare la password', attr: { autocomplete: 'new-password' } }, second_options: { label: 'Ripeti password' } } }
-            passwordChangedAt:          { label: Ultimo cambio passowrd }
+            passwordChangedAt:          { label: Ultimo cambio password }
+            passwordChangedFromIp:      { label: IP ultimo cambio password }
             changePasswordSecret:       { label: Codice per cambio password }
             changePasswordRequestedAt:  { label: Data Richiesta cambio password }
             roles:                      { label: Permessi, formType: 'Symfony\Component\Form\Extension\Core\Type\ChoiceType', formTypeOptions: { multiple: true, expanded: true } }
@@ -29,15 +30,15 @@ admins:
             display:      [ email, rolesAsBadges, createdAt, isEnabled, loginCount, lastLogin ]
             quickSearch:  [ email, roles ]
             filters:      [ isEnabled, loginCount ]
-            export:       [ email, roles, isEnabled, loginCount, previousLogin, lastLogin, passwordChangedAt, createdBy, createdFromIp, createdAt, updatedBy, updatedFromIp, updatedAt ]
+            export:       [ email, roles, isEnabled, loginCount, previousLogin, lastLogin, passwordChangedAt, passwordChangedFromIp, createdBy, createdFromIp, createdAt, updatedBy, updatedFromIp, updatedAt ]
         object:
-            display:  [ email, rolesAsBadges, isEnabled, loginCount, previousLogin, lastLogin, passwordChangedAt ]
+            display:  [ email, rolesAsBadges, isEnabled, loginCount, previousLogin, lastLogin, passwordChangedAt, passwordChangedFromIp ]
             form:     [ email, isEnabled, plainPassword, roles ]
             actions:
                 impersonate: { label: impersonifica, icon: fas fa-user-secret, color: purple, methods: [ GET ], condition: { roles: [ ROLE_ALLOWED_TO_SWITCH ], method: isEnabled } }
             layout:
                 row1: [
-                    { title: Credenziali, class: col-lg-6, color: white, bgColor: green, style: table, fields: [ email, plainPassword, passwordChangedAt ] }
+                    { title: Credenziali, class: col-lg-6, color: white, bgColor: green, style: table, fields: [ email, plainPassword, passwordChangedAt, passwordChangedFromIp ] }
                     { title: Permessi, class: col-lg-6, color: dark, bgColor: yellow, style: table, fields: [ isEnabled, roles ] }
                     { title: Accessi, class: col-12, style: table, fields: [ loginCount, previousLogin, lastLogin ] }
                 ]

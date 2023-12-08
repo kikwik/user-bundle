@@ -97,11 +97,11 @@ abstract class BaseUser implements UserInterface
      * @var \DateTime|null
      *
      * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Timestampable(on="change", field={"password"})
+     * @Gedmo\Timestampable(on="change", field={"changePasswordSecret"})
      */
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Gedmo\Timestampable(on: 'change', field: ['password'])]
-    protected $passwordChangedAt;
+    #[Gedmo\Timestampable(on: 'change', field: ['changePasswordSecret'])]
+    protected $changePasswordRequestedAt;
 
     /**
      * @var string|null
@@ -115,11 +115,21 @@ abstract class BaseUser implements UserInterface
      * @var \DateTime|null
      *
      * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Timestampable(on="change", field={"changePasswordSecret"})
+     * @Gedmo\Timestampable(on="change", field={"password"})
      */
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Gedmo\Timestampable(on: 'change', field: ['changePasswordSecret'])]
-    protected $changePasswordRequestedAt;
+    #[Gedmo\Timestampable(on: 'change', field: ['password'])]
+    protected $passwordChangedAt;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(length=45, nullable=true)
+     * @Gedmo\IpTraceable(on="change", field={"password"})
+     */
+    #[ORM\Column(length: 45, nullable: true)]
+    #[Gedmo\IpTraceable(on: 'change', field: ['password'])]
+    protected $passwordChangedFromIp;
 
     /**
      * @return string
@@ -138,6 +148,13 @@ abstract class BaseUser implements UserInterface
     }
 
     /**
+     * @return string|null
+     */
+    public function getChangePasswordSecret(): ?string {
+        return $this->changePasswordSecret;
+    }
+
+    /**
      * @return \DateTime|null
      */
     public function getPasswordChangedAt(): ?\DateTime {
@@ -147,8 +164,9 @@ abstract class BaseUser implements UserInterface
     /**
      * @return string|null
      */
-    public function getChangePasswordSecret(): ?string {
-        return $this->changePasswordSecret;
+    public function getPasswordChangedFromIp(): ?string
+    {
+        return $this->passwordChangedFromIp;
     }
 
     /**
