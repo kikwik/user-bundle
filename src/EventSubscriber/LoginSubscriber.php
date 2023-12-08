@@ -19,14 +19,14 @@ class LoginSubscriber implements EventSubscriberInterface
         $this->em = $em;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             'security.interactive_login' => 'onLogin'
         ];
     }
 
-    public function onLogin(InteractiveLoginEvent $event)
+    public function onLogin(InteractiveLoginEvent $event): void
     {
         /** @var \Kikwik\UserBundle\Model\BaseUser $user */
         $user = $event->getAuthenticationToken()->getUser();

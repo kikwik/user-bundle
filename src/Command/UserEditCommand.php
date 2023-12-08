@@ -24,7 +24,7 @@ class UserEditCommand extends BaseCommand
         $this->passwordHasher = $passwordHasher;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('kikwik:user:edit')
@@ -37,7 +37,7 @@ class UserEditCommand extends BaseCommand
             ));
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output)
+    protected function interact(InputInterface $input, OutputInterface $output): void
     {
         $io = new SymfonyStyle($input, $output);
         $io->title('Delete a '.$this->userClass);
@@ -49,7 +49,7 @@ class UserEditCommand extends BaseCommand
         $this->askForIsEnabledOption($input, $output, $user->isEnabled());
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $username = $input->getArgument('username');

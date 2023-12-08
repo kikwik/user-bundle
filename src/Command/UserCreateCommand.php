@@ -22,7 +22,7 @@ class UserCreateCommand extends BaseCommand
         $this->passwordHasher = $passwordHasher;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('kikwik:user:create')
@@ -34,7 +34,7 @@ class UserCreateCommand extends BaseCommand
             ));
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output)
+    protected function interact(InputInterface $input, OutputInterface $output): void
     {
         $io = new SymfonyStyle($input, $output);
         $io->title('Creating a new '.$this->userClass);
@@ -52,7 +52,7 @@ class UserCreateCommand extends BaseCommand
     }
 
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $username = $input->getArgument('username');

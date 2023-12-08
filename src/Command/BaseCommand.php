@@ -35,7 +35,7 @@ abstract class BaseCommand extends Command
         $this->entityManager = $entityManager;
     }
 
-    protected function askForUsernameArgument(InputInterface $input, OutputInterface $output, $mustExists)
+    protected function askForUsernameArgument(InputInterface $input, OutputInterface $output, $mustExists): void
     {
         $io = new SymfonyStyle($input, $output);
         if (!$input->getArgument('username'))
@@ -68,7 +68,7 @@ abstract class BaseCommand extends Command
         }
     }
 
-    protected function askForPasswordArgument(InputInterface $input, OutputInterface $output)
+    protected function askForPasswordArgument(InputInterface $input, OutputInterface $output): void
     {
         $io = new SymfonyStyle($input, $output);
         if (!$input->getArgument('password'))
@@ -83,13 +83,13 @@ abstract class BaseCommand extends Command
         }
     }
 
-    protected function askForPasswordOption(InputInterface $input, OutputInterface $output)
+    protected function askForPasswordOption(InputInterface $input, OutputInterface $output): void
     {
         $io = new SymfonyStyle($input, $output);
         $input->setOption('password',$io->ask('Please choose a password (leave blank if you don\'t want to change it)',null));
     }
 
-    protected function askForRolesOption(InputInterface $input, OutputInterface $output)
+    protected function askForRolesOption(InputInterface $input, OutputInterface $output): void
     {
         $io = new SymfonyStyle($input, $output);
 
@@ -102,7 +102,7 @@ abstract class BaseCommand extends Command
         $input->setOption('roles',$io->ask('Please enter the new user roles'."\n".' * leave blank if you don\'t want to change it'."\n".' * enter a comma separated list'."\n".' * enter ROLE_USER to delete all extra roles'."\n",implode(', ',$user->getRoles())));
     }
 
-    protected function askForIsEnabledOption(InputInterface $input, OutputInterface $output, $default)
+    protected function askForIsEnabledOption(InputInterface $input, OutputInterface $output, $default): void
     {
         $io = new SymfonyStyle($input, $output);
         $input->setOption('isEnabled',$io->confirm('user access is enabled?',$default));

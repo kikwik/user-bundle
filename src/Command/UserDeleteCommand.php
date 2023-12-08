@@ -15,7 +15,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class UserDeleteCommand extends BaseCommand
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('kikwik:user:delete')
@@ -25,7 +25,7 @@ class UserDeleteCommand extends BaseCommand
             ));
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output)
+    protected function interact(InputInterface $input, OutputInterface $output): void
     {
         $io = new SymfonyStyle($input, $output);
         $io->title('Delete a '.$this->userClass);
@@ -33,7 +33,7 @@ class UserDeleteCommand extends BaseCommand
         $this->askForUsernameArgument($input, $output, true);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $username = $input->getArgument('username');

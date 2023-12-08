@@ -13,7 +13,7 @@ use Symfony\Component\Yaml\Yaml;
 
 class KikwikUserExtension extends Extension implements PrependExtensionInterface
 {
-    public function prepend(ContainerBuilder $container)
+    public function prepend(ContainerBuilder $container): void
     {
         // stof_doctrine_extensions configuration
         $stofDoctrineExtensionConfig = Yaml::parseFile(__DIR__.'/../Resources/config/bundles/stof_doctrine_extensions.yaml');
@@ -45,7 +45,7 @@ class KikwikUserExtension extends Extension implements PrependExtensionInterface
         }
     }
 
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');

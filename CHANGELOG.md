@@ -5,7 +5,7 @@
 - removed kikwik/iptraceable-listener-bundle dependecy
 - added BaseUser::passwordChangedFromIp field 
 - last/previous login refactoring in BaseUser, new field names: lastLoginAt, lastLoginFromIp, previousLoginAt, previousLoginFromIp
-
+- fix deprecations
 
 
 ## v1.0.2 (2023-09-24)
