@@ -18,6 +18,21 @@ trait KikwikUserContextTrait
         return 'email';
     }
 
+    protected function getLoginPath()
+    {
+        return '/login';
+    }
+
+    protected function getPasswordPath()
+    {
+        return '/password';
+    }
+
+    protected function getInvalidCredentialMessage()
+    {
+        return 'Credenziali non valide';
+    }
+
     /**
      * @Given There is a user :userEmail with password :userPassword and :userRoles roles
      */
@@ -60,11 +75,11 @@ trait KikwikUserContextTrait
      */
     public function iAmAuthenticatedAsWithPassword($userIdentifier, $userPassword)
     {
-        $this->visitPath('/login');
+        $this->visitPath($this->getLoginPath());
         $this->getSession()->getPage()->fillField($this->getUserIdentifierField(), $userIdentifier);
         $this->getSession()->getPage()->fillField('password', $userPassword);
         $this->getSession()->getPage()->pressButton('login-submit');
-        $this->assertPageNotContainsText('Credenziali non valide.');
+        $this->assertPageNotContainsText($this->getInvalidCredentialMessage());
     }
 
     /**
@@ -99,7 +114,7 @@ trait KikwikUserContextTrait
             throw new ExpectationFailedException($message);
         }
         $this->entityManager->refresh($user);
-        $this->visit(sprintf('/password/reset/%s/%s',$userIdentifier, $user->getChangePasswordSecret()));
+        $this->visit(sprintf($this->getPasswordPath().'/reset/%s/%s',$userIdentifier, $user->getChangePasswordSecret()));
     }
 
     protected function getSymfonyProfiler()
