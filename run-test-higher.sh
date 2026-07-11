@@ -1,3 +1,3 @@
 #!/bin/bash
-php8.2 composer.phar update
-php8.2 vendor/bin/simple-phpunit
+php8.5 composer.phar update
+php8.5 vendor/bin/phpunit --testdox

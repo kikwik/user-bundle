@@ -29,8 +29,8 @@
         }
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "^6.4",
-        "nyholm/symfony-bundle-test": "^2.0"
+        "symfony/phpunit-bridge": "^6.4|^7.0",
+        "phpunit/phpunit": "^9.6"
     },
     "autoload-dev": {
         "psr-4": {
