@@ -5,6 +5,7 @@ namespace Kikwik\UserBundle\Command;
 
 
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -40,11 +41,11 @@ class UserEditCommand extends BaseCommand
     protected function interact(InputInterface $input, OutputInterface $output): void
     {
         $io = new SymfonyStyle($input, $output);
-        $io->title('Delete a '.$this->userClass);
+        $io->title('Edit a '.$this->userClass);
 
         $this->askForUsernameArgument($input, $output, true);
-        $this->askForRolesOption($input, $output);
         $this->askForPasswordOption($input, $output);
+        $this->askForRolesOption($input, $output);
         $user = $this->entityManager->getRepository($this->userClass)->findOneBy([$this->userIdentifierField => $input->getArgument('username')]);
         $this->askForIsEnabledOption($input, $output, $user->isEnabled());
     }
@@ -79,6 +80,6 @@ class UserEditCommand extends BaseCommand
 
         $io->success('User '.$username.' successfully edited'."\n".'roles: '.implode(', ',$user->getRoles()));
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

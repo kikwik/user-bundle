@@ -31,8 +31,11 @@
         }
     },
     "require-dev": {
+        "ext-pdo_sqlite": "*",
         "symfony/phpunit-bridge": "^6.4|^7.0",
-        "phpunit/phpunit": "^9.6"
+        "symfony/config": "^6.4 || ^7.0",
+        "phpunit/phpunit": "^9.6",
+        "zenstruck/foundry": "^2.10"
     },
     "autoload-dev": {
         "psr-4": {

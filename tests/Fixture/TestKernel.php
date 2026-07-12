@@ -4,6 +4,8 @@ namespace Kikwik\UserBundle\Tests\Fixture;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Kikwik\UserBundle\KikwikUserBundle;
+use Kikwik\UserBundle\Tests\Fixture\Entity\User;
+use Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
@@ -12,7 +14,8 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Zenstruck\Foundry\ZenstruckFoundryBundle;
 
 class TestKernel extends Kernel
 {
@@ -23,15 +26,30 @@ class TestKernel extends Kernel
         yield new FrameworkBundle();
         yield new DoctrineBundle();
         yield new SecurityBundle();
+        yield new StofDoctrineExtensionsBundle();
         yield new TwigBundle();
+        yield new ZenstruckFoundryBundle();
         yield new KikwikUserBundle();
     }
 
     private function configureContainer(ContainerConfigurator $container, LoaderInterface $loader, ContainerBuilder $builder): void
     {
+        $services = $container->services()
+            ->defaults()
+            ->autowire()
+            ->autoconfigure();
+
+        $services
+            ->load('Kikwik\\UserBundle\\Tests\\Factory\\', '../Factory/')
+            ->public();
+
         $container->extension('framework', [
             'test' => true,
             'secret' => 'test',
+        ]);
+
+        $container->extension('kikwik_user', [
+            'user_class' => User::class,
         ]);
 
         $container->extension('doctrine', [
@@ -50,11 +68,14 @@ class TestKernel extends Kernel
 
         $container->extension('security', [
             'password_hashers' => [
-                UserPasswordHasherInterface::class => 'auto',
+                PasswordAuthenticatedUserInterface::class => 'auto',
             ],
             'providers' => [
-                'users_in_memory' => [
-                    'memory' => null,
+                'bundle_user_provider' => [
+                    'entity' => [
+                        'class' => User::class,
+                        'property' => 'username',
+                    ],
                 ],
             ],
             'firewalls' => [
@@ -64,7 +85,7 @@ class TestKernel extends Kernel
                 ],
                 'main' => [
                     'lazy' => true,
-                    'provider' => 'users_in_memory',
+                    'provider' => 'bundle_user_provider',
                 ],
             ],
         ]);

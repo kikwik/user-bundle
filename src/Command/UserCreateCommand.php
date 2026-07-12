@@ -3,6 +3,7 @@
 namespace Kikwik\UserBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -84,7 +85,7 @@ class UserCreateCommand extends BaseCommand
 
         $io->success('User '.$username.' successfully created');
 
-        return 0;
+        return Command::SUCCESS;
     }
 
 

@@ -2,7 +2,7 @@
 
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-         bootstrap="vendor/autoload.php"
+         bootstrap="tests/bootstrap.php"
          colors="true"
          failOnRisky="true"
          failOnWarning="true"
@@ -12,7 +12,7 @@
     <ini name="intl.default_locale" value="en" />
     <ini name="intl.error_level" value="0" />
     <ini name="memory_limit" value="-1" />
-    <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=0&amp;max[direct]=0&amp;quiet[]=indirect&amp;quiet[]=other"/>
+    <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=0&amp;max[direct]=0&amp;quiet[]=indirect&amp;quiet[]=other&amp;logFile=var/log/deprecations.log"/>
     <env name="KERNEL_CLASS" value="Kikwik\UserBundle\Tests\Fixture\TestKernel"/>
   </php>
 

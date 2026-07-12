@@ -8,10 +8,13 @@ use Kikwik\UserBundle\Command\UserEditCommand;
 use Kikwik\UserBundle\Controller\PasswordController;
 use Kikwik\UserBundle\EventSubscriber\LoginSubscriber;
 use Kikwik\UserBundle\Security\UserChecker;
+use Kikwik\UserBundle\Tests\BaseWebTestCase;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class bundleTest extends KernelTestCase
+
+class KikwikUserBundleTest extends BaseWebTestCase
 {
+
     public function testCanAccessService()
     {
         $container = self::getContainer();

@@ -41,21 +41,23 @@ class UserDeleteCommand extends BaseCommand
         $user = $this->entityManager->getRepository($this->userClass)->findOneBy([$this->userIdentifierField => $username]);
         if(!$user)
         {
-            throw new \RuntimeException('User '.$username.' does not exists');
-        }
-
-        if($io->askQuestion(new ConfirmationQuestion('Are you sure?', false)))
-        {
-            $this->entityManager->remove($user);
-            $this->entityManager->flush();
-
-            $io->success('User '.$username.' successfully deleted');
+            $io->error('User '.$username.' does not exists');
         }
         else
         {
-            $io->warning('User '.$username.' was NOT deleted');
+            if($io->askQuestion(new ConfirmationQuestion('Are you sure?', false)))
+            {
+                $this->entityManager->remove($user);
+                $this->entityManager->flush();
+
+                $io->success('User '.$username.' successfully deleted');
+            }
+            else
+            {
+                $io->warning('User '.$username.' was NOT deleted');
+            }
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 }
