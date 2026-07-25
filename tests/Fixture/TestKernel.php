@@ -36,6 +36,11 @@ class TestKernel extends Kernel
     private function configureRoutes(RoutingConfigurator $routes): void
     {
         $routes->import($this->getProjectDir().'/src/Resources/config/routes.php');
+
+        $routes->import(
+            $this->getProjectDir().'/tests/Fixture/Controller/',
+            'attribute'
+        );
     }
 
     private function configureContainer(ContainerConfigurator $container, LoaderInterface $loader, ContainerBuilder $builder): void
@@ -49,6 +54,10 @@ class TestKernel extends Kernel
             ->load('Kikwik\\UserBundle\\Tests\\Factory\\', '../Factory/')
             ->public();
 
+        $services
+            ->load('Kikwik\\UserBundle\\Tests\\Fixture\\Controller\\', 'Controller/')
+            ->tag('controller.service_arguments');
+
         $container->extension('framework', [
             'test' => true,
             'secret' => 'test',
@@ -61,6 +70,12 @@ class TestKernel extends Kernel
             'csrf_protection' => true,
             'mailer' => [
                 'dsn' => 'null://null',
+            ],
+        ]);
+
+        $container->extension('twig', [
+            'paths' => [
+                '%kernel.project_dir%/tests/Fixture/templates' => null,
             ],
         ]);
 
@@ -102,6 +117,33 @@ class TestKernel extends Kernel
                 'main' => [
                     'lazy' => true,
                     'provider' => 'bundle_user_provider',
+                    'form_login' => [
+                        'login_path' => 'test_login',
+                        'check_path' => 'test_login',
+                        'enable_csrf' => true,
+                        'csrf_token_id' => 'authenticate',
+                        'username_parameter' => '_username',
+                        'password_parameter' => '_password',
+                        'default_target_path' => 'test_profile',
+                    ],
+                    'logout' => [
+                        'path' => 'test_logout',
+                        'target' => 'test_login',
+                    ],
+                ],
+            ],
+            'access_control' => [
+                [
+                    'path' => '^/login$',
+                    'roles' => 'PUBLIC_ACCESS',
+                ],
+                [
+                    'path' => '^/profile$',
+                    'roles' => 'ROLE_USER',
+                ],
+                [
+                    'path' => '^/',
+                    'roles' => 'PUBLIC_ACCESS',
                 ],
             ],
         ]);

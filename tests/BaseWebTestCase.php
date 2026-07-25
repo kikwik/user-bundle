@@ -17,6 +17,16 @@ class BaseWebTestCase extends WebTestCase
 
     private ?Application $application = null;
 
+    private ?KernelBrowser $client = null;
+
+    protected function tearDown(): void
+    {
+        $this->application = null;
+        $this->client = null;
+
+        parent::tearDown();
+    }
+
     protected function bootTestKernel(): void
     {
         if (self::$kernel === null) {
@@ -26,7 +36,9 @@ class BaseWebTestCase extends WebTestCase
 
     protected function getTestContainer(): ContainerInterface
     {
-        $this->bootTestKernel();
+        if (self::$kernel === null) {
+            $this->bootTestKernel();
+        }
 
         return static::getContainer();
     }
@@ -60,6 +72,22 @@ class BaseWebTestCase extends WebTestCase
 
     protected function createTestClient(array $options = [], array $server = []): KernelBrowser
     {
-        return static::createClient($options, $server);
+        if (self::$kernel !== null) {
+            self::ensureKernelShutdown();
+        }
+
+        $this->application = null;
+        $this->client = static::createClient($options, $server);
+
+        return $this->client;
+    }
+
+    protected function getTestClient(): KernelBrowser
+    {
+        if ($this->client === null) {
+            $this->client = $this->createTestClient();
+        }
+
+        return $this->client;
     }
 }

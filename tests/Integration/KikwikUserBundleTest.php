@@ -9,6 +9,7 @@ use Kikwik\UserBundle\Controller\PasswordController;
 use Kikwik\UserBundle\EventSubscriber\LoginSubscriber;
 use Kikwik\UserBundle\Security\UserChecker;
 use Kikwik\UserBundle\Tests\BaseWebTestCase;
+use Kikwik\UserBundle\Tests\Factory\UserFactory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 
@@ -46,4 +47,6 @@ class KikwikUserBundleTest extends BaseWebTestCase
         self::assertNotNull($routes->get('kikwik_user_password_request'));
         self::assertNotNull($routes->get('kikwik_user_password_reset'));
     }
+
+
 }
