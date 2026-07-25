@@ -14,6 +14,7 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Zenstruck\Foundry\ZenstruckFoundryBundle;
 
@@ -32,6 +33,11 @@ class TestKernel extends Kernel
         yield new KikwikUserBundle();
     }
 
+    private function configureRoutes(RoutingConfigurator $routes): void
+    {
+        $routes->import($this->getProjectDir().'/src/Resources/config/routes.php');
+    }
+
     private function configureContainer(ContainerConfigurator $container, LoaderInterface $loader, ContainerBuilder $builder): void
     {
         $services = $container->services()
@@ -46,6 +52,16 @@ class TestKernel extends Kernel
         $container->extension('framework', [
             'test' => true,
             'secret' => 'test',
+            'router' => [
+                'utf8' => true,
+            ],
+            'session' => [
+                'storage_factory_id' => 'session.storage.factory.mock_file',
+            ],
+            'csrf_protection' => true,
+            'mailer' => [
+                'dsn' => 'null://null',
+            ],
         ]);
 
         $container->extension('kikwik_user', [

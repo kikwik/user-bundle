@@ -34,4 +34,16 @@ class KikwikUserBundleTest extends BaseWebTestCase
             $this->assertInstanceOf($serviceClass, $service, 'Service '.$serviceId.' must be an instance of '.$serviceClass);
         }
     }
+
+    public function testBundleRoutesAreLoaded(): void
+    {
+        $container = $this->getTestContainer();
+
+        $router = $container->get('router');
+        $routes = $router->getRouteCollection();
+
+        self::assertNotNull($routes->get('kikwik_user_password_change'));
+        self::assertNotNull($routes->get('kikwik_user_password_request'));
+        self::assertNotNull($routes->get('kikwik_user_password_reset'));
+    }
 }

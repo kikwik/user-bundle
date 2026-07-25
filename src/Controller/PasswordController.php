@@ -17,7 +17,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -51,7 +51,7 @@ class PasswordController
         AuthorizationCheckerInterface $authorizationChecker,
         FormFactoryInterface $formFactory,
         Environment $twig,
-        TokenStorage $tokenStorage,
+        TokenStorageInterface $tokenStorage,
         UrlGeneratorInterface $urlGenerator,
         RequestStack $requestStack,
         UserPasswordHasherInterface $passwordHasher,

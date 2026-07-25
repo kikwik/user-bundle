@@ -102,11 +102,21 @@ security:
 
 To activate the change and forgot password feature add routes in `config/routes/kikwik_user.yaml`:
 
-```yaml
-kikwik_user_bundle_password:
-    resource: '@KikwikUserBundle/Resources/config/routes.xml'
-    prefix: '/password'
-```
+- for symfony 6.4
+
+    ```yaml
+    kikwik_user_bundle_password:
+        resource: '@KikwikUserBundle/Resources/config/routes.xml'
+        prefix: '/password'
+    ```
+
+- for symfony 7.4+
+
+    ```yaml
+    kikwik_user_bundle_password:
+        resource: '@KikwikUserBundle/Resources/config/routes.php'
+        prefix: '/password'
+    ```
 
 The forgot password uses symfony/mailer component, so you must configure it in `.env`
 
