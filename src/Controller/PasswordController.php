@@ -33,7 +33,6 @@ class PasswordController
     private $twig;
     private $tokenStorage;
     private $urlGenerator;
-    private $session;
     private $passwordHasher;
     private $translator;
 
@@ -53,7 +52,6 @@ class PasswordController
         Environment $twig,
         TokenStorageInterface $tokenStorage,
         UrlGeneratorInterface $urlGenerator,
-        RequestStack $requestStack,
         UserPasswordHasherInterface $passwordHasher,
         TranslatorInterface $translator,
         MailerInterface $mailer,
@@ -65,7 +63,6 @@ class PasswordController
         $this->twig = $twig;
         $this->tokenStorage = $tokenStorage;
         $this->urlGenerator = $urlGenerator;
-        $this->session = $requestStack->getSession();
         $this->passwordHasher = $passwordHasher;
         $this->translator = $translator;
         $this->mailer = $mailer;
@@ -101,7 +98,7 @@ class PasswordController
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
-            $this->session->getFlashBag()->add('success change_password',$this->translator->trans('change_password.flash.success',[],'KikwikUserBundle'));
+            $session->getFlashBag()->add('success change_password',$this->translator->trans('change_password.flash.success',[],'KikwikUserBundle'));
             $returnUrl = $this->removeReferer($session);
             return new RedirectResponse($returnUrl);
         }
@@ -145,7 +142,7 @@ class PasswordController
                 // check email configuration
                 if(!$this->userEmailField)
                 {
-                    $this->session->getFlashBag()->add('danger',$this->translator->trans('request_password.flash.danger_no_email_configuration',[],'KikwikUserBundle'));
+                    $session->getFlashBag()->add('danger',$this->translator->trans('request_password.flash.danger_no_email_configuration',[],'KikwikUserBundle'));
                     return $this->redirectToRoute('kikwik_user_password_request');
                 }
 
@@ -154,7 +151,7 @@ class PasswordController
                 $userEmail = $user->$emailGetter();
                 if(!$userEmail)
                 {
-                    $this->session->getFlashBag()->add('danger',$this->translator->trans('request_password.flash.danger_no_email',[],'KikwikUserBundle'));
+                    $session->getFlashBag()->add('danger',$this->translator->trans('request_password.flash.danger_no_email',[],'KikwikUserBundle'));
                     return $this->redirectToRoute('kikwik_user_password_request');
                 }
 
@@ -163,7 +160,7 @@ class PasswordController
                 }
                 catch (\Exception $e)
                 {
-                    $this->session->getFlashBag()->add('danger',$this->translator->trans('request_password.flash.danger_email_not_valid',[],'KikwikUserBundle'));
+                    $session->getFlashBag()->add('danger',$this->translator->trans('request_password.flash.danger_email_not_valid',[],'KikwikUserBundle'));
                     return $this->redirectToRoute('kikwik_user_password_request');
                 }
 
@@ -190,12 +187,12 @@ class PasswordController
                 $this->mailer->send($email);
 
 
-                $this->session->getFlashBag()->add('success request_password',$this->translator->trans('request_password.flash.success',[],'KikwikUserBundle'));
+                $session->getFlashBag()->add('success request_password',$this->translator->trans('request_password.flash.success',[],'KikwikUserBundle'));
                 return $this->redirectToRoute('kikwik_user_password_request');
             }
             else
             {
-                $this->session->getFlashBag()->add('danger',$this->translator->trans('request_password.flash.danger_no_user',[],'KikwikUserBundle'));
+                $session->getFlashBag()->add('danger',$this->translator->trans('request_password.flash.danger_no_user',[],'KikwikUserBundle'));
                 return $this->redirectToRoute('kikwik_user_password_request');
             }
         }
@@ -236,7 +233,7 @@ class PasswordController
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
 
-                $this->session->getFlashBag()->add('success reset_password',$this->translator->trans('reset_password.flash.success',[],'KikwikUserBundle'));
+                $session->getFlashBag()->add('success reset_password',$this->translator->trans('reset_password.flash.success',[],'KikwikUserBundle'));
                 $returnUrl = $this->removeReferer($session);
                 return new RedirectResponse($returnUrl);
             }
