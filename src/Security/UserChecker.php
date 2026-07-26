@@ -5,6 +5,7 @@ namespace Kikwik\UserBundle\Security;
 
 use Kikwik\UserBundle\Exception\AccountDisabledException;
 use Kikwik\UserBundle\Model\BaseUser;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -21,7 +22,7 @@ class UserChecker implements UserCheckerInterface
         }
     }
 
-    public function checkPostAuth(UserInterface $user): void
+    public function checkPostAuth(UserInterface $user, ?TokenInterface $token = null): void
     {
         // nothing to do here
     }

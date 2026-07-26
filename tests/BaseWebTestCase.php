@@ -90,4 +90,26 @@ class BaseWebTestCase extends WebTestCase
 
         return $this->client;
     }
+
+    protected function doLogin(KernelBrowser $client, string $username, string $password)
+    {
+        $crawler = $client->request('GET', '/login');
+        self::assertResponseIsSuccessful();
+        $form = $crawler->selectButton('Login')->form([
+            '_username' => $username,
+            '_password' => $password,
+        ]);
+        $client->submit($form);
+        self::assertResponseRedirects('/profile');
+        $client->followRedirect();
+        self::assertSelectorTextContains('body', 'Profile');
+    }
+
+    protected function doLogout(KernelBrowser $client)
+    {
+        $client->request('GET', '/logout');
+        self::assertResponseRedirects('/login');
+        $client->followRedirect();
+        self::assertResponseIsSuccessful();
+    }
 }

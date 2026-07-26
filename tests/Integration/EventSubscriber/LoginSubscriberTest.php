@@ -22,9 +22,9 @@ class LoginSubscriberTest extends BaseWebTestCase
         $this->assertNull($user->getPreviousLoginFromIp());
 
         // first login
-        $client = $this->createTestClient();
+        $client = $this->getTestClient();
         $beforeLoginTimestamp = time();
-        $this->doLogin($client);
+        $this->doLogin($client, 'mario', 'password');
         $afterLoginTimestamp = time();
 
 
@@ -51,7 +51,7 @@ class LoginSubscriberTest extends BaseWebTestCase
         $this->doLogout($client);
         sleep(1);
         $beforeLoginTimestamp = time();
-        $this->doLogin($client);
+        $this->doLogin($client, 'mario', 'password');
         $afterLoginTimestamp = time();
 
         // refresh user
@@ -73,25 +73,5 @@ class LoginSubscriberTest extends BaseWebTestCase
     }
 
 
-    private function doLogin(KernelBrowser $client)
-    {
-        $crawler = $client->request('GET', '/login');
-        self::assertResponseIsSuccessful();
-        $form = $crawler->selectButton('Login')->form([
-            '_username' => 'mario',
-            '_password' => 'password',
-        ]);
-        $client->submit($form);
-        self::assertResponseRedirects('/profile');
-        $client->followRedirect();
-        self::assertSelectorTextContains('body', 'Profile');
-    }
 
-    private function doLogout(KernelBrowser $client)
-    {
-        $client->request('GET', '/logout');
-        self::assertResponseRedirects('/login');
-        $client->followRedirect();
-        self::assertResponseIsSuccessful();
-    }
 }

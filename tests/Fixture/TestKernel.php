@@ -5,6 +5,8 @@ namespace Kikwik\UserBundle\Tests\Fixture;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Kikwik\UserBundle\KikwikUserBundle;
 use Kikwik\UserBundle\Tests\Fixture\Entity\User;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
@@ -49,6 +51,11 @@ class TestKernel extends Kernel
             ->defaults()
             ->autowire()
             ->autoconfigure();
+
+        $services
+            ->set('logger', NullLogger::class);
+        $services
+            ->alias(LoggerInterface::class, 'logger');
 
         $services
             ->load('Kikwik\\UserBundle\\Tests\\Factory\\', '../Factory/')
@@ -117,6 +124,7 @@ class TestKernel extends Kernel
                 'main' => [
                     'lazy' => true,
                     'provider' => 'bundle_user_provider',
+                    'user_checker' => 'Kikwik\UserBundle\Security\UserChecker',
                     'form_login' => [
                         'login_path' => 'test_login',
                         'check_path' => 'test_login',
