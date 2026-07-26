@@ -12,17 +12,17 @@
     ],
     "require": {
         "php": ">=8.2.0",
-        "symfony/framework-bundle": "^6.4|^7.0",
-        "symfony/security-bundle": "^6.4|^7.0",
-        "symfony/translation": "^6.4|^7.0",
-        "symfony/mailer": "^6.4|^7.0",
-        "symfony/form": "^6.4|^7.0",
-        "symfony/validator": "^6.4|^7.0",
-        "symfony/twig-bundle": "^6.4|^7.0",
-        "symfony/yaml": "^6.4|^7.0",
+        "symfony/framework-bundle": "^6.4 || ^7.0",
+        "symfony/security-bundle": "^6.4 || ^7.0",
+        "symfony/translation": "^6.4 || ^7.0",
+        "symfony/mailer": "^6.4 || ^7.0",
+        "symfony/form": "^6.4 || ^7.0",
+        "symfony/validator": "^6.4 || ^7.0",
+        "symfony/twig-bundle": "^6.4 || ^7.0",
+        "symfony/yaml": "^6.4 || ^7.0",
         "symfony/var-exporter": "^6.4 || ^7.0",
         "doctrine/doctrine-bundle": "^2.0",
-        "doctrine/orm": "^2.7|^3.0",
+        "doctrine/orm": "^2.7 || ^3.0",
         "stof/doctrine-extensions-bundle": "^1.9"
     },
     "autoload": {
@@ -32,12 +32,12 @@
     },
     "require-dev": {
         "ext-pdo_sqlite": "*",
-        "symfony/phpunit-bridge": "^6.4|^7.0",
+        "symfony/phpunit-bridge": "^6.4 || ^7.0",
         "symfony/config": "^6.4 || ^7.0",
         "phpunit/phpunit": "^9.6",
         "zenstruck/foundry": "^2.10",
-        "symfony/browser-kit": "^6.4",
-        "symfony/css-selector": "^6.4"
+        "symfony/browser-kit": "^6.4 || ^7.0",
+        "symfony/css-selector": "^6.4 || ^7.0"
     },
     "autoload-dev": {
         "psr-4": {
