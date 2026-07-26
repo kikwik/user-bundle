@@ -15,11 +15,11 @@ class LoginSubscriberTest extends BaseWebTestCase
             'username' => 'mario',
             'password' => 'password',
         ]);
-        $this->assertEquals(0, $user->getLoginCount());
-        $this->assertNull($user->getLastLoginAt());
-        $this->assertNull($user->getLastLoginFromIp());
-        $this->assertNull($user->getPreviousLoginAt());
-        $this->assertNull($user->getPreviousLoginFromIp());
+        self::assertEquals(0, $user->getLoginCount());
+        self::assertNull($user->getLastLoginAt());
+        self::assertNull($user->getLastLoginFromIp());
+        self::assertNull($user->getPreviousLoginAt());
+        self::assertNull($user->getPreviousLoginFromIp());
 
         // first login
         $client = $this->getTestClient();
@@ -31,19 +31,19 @@ class LoginSubscriberTest extends BaseWebTestCase
         // refresh user
         $user = UserFactory::repository()->first();
         // check loginCount
-        $this->assertEquals(1, $user->getLoginCount());
+        self::assertEquals(1, $user->getLoginCount());
         // check lastLoginAt
         $firstLoginAt = $user->getLastLoginAt();
-        $this->assertNotNull($firstLoginAt);
-        $this->assertGreaterThanOrEqual($beforeLoginTimestamp, $firstLoginAt->getTimestamp());
-        $this->assertLessThanOrEqual($afterLoginTimestamp, $firstLoginAt->getTimestamp());
+        self::assertNotNull($firstLoginAt);
+        self::assertGreaterThanOrEqual($beforeLoginTimestamp, $firstLoginAt->getTimestamp());
+        self::assertLessThanOrEqual($afterLoginTimestamp, $firstLoginAt->getTimestamp());
         // check lastLoginFromIp
         $firstLoginFromIp = $user->getLastLoginFromIp();
-        $this->assertEquals('127.0.0.1', $firstLoginFromIp);
+        self::assertEquals('127.0.0.1', $firstLoginFromIp);
         // check previousLoginAt
-        $this->assertNull($user->getPreviousLoginAt());
+        self::assertNull($user->getPreviousLoginAt());
         // check previousLoginFromIp
-        $this->assertNull($user->getPreviousLoginFromIp());
+        self::assertNull($user->getPreviousLoginFromIp());
 
 
 
@@ -57,18 +57,18 @@ class LoginSubscriberTest extends BaseWebTestCase
         // refresh user
         $user = UserFactory::repository()->first();
         // check loginCount
-        $this->assertEquals(2, $user->getLoginCount());
+        self::assertEquals(2, $user->getLoginCount());
         // check lastLoginAt
         $secondLoginAt = $user->getLastLoginAt();
-        $this->assertNotNull($secondLoginAt);
-        $this->assertGreaterThanOrEqual($beforeLoginTimestamp, $secondLoginAt->getTimestamp());
-        $this->assertLessThanOrEqual($afterLoginTimestamp, $secondLoginAt->getTimestamp());
+        self::assertNotNull($secondLoginAt);
+        self::assertGreaterThanOrEqual($beforeLoginTimestamp, $secondLoginAt->getTimestamp());
+        self::assertLessThanOrEqual($afterLoginTimestamp, $secondLoginAt->getTimestamp());
         // check lastLoginFromIp
-        $this->assertEquals('127.0.0.1', $user->getLastLoginFromIp());
+        self::assertEquals('127.0.0.1', $user->getLastLoginFromIp());
         // check previousLoginAt
-        $this->assertEquals($firstLoginAt, $user->getPreviousLoginAt());
+        self::assertEquals($firstLoginAt, $user->getPreviousLoginAt());
         // check previousLoginFromIp
-        $this->assertEquals($firstLoginFromIp, $user->getPreviousLoginFromIp());
+        self::assertEquals($firstLoginFromIp, $user->getPreviousLoginFromIp());
 
     }
 

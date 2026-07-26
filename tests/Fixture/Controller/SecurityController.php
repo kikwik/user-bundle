@@ -27,12 +27,12 @@ class SecurityController extends AbstractController
     #[Route('/', name: 'test_home')]
     public function home(): Response
     {
-        return new Response('Home');
+        return $this->render('security/home.html.twig');
     }
 
     #[Route('/profile', name: 'test_profile')]
     public function profile(): Response
     {
-        return new Response('Profile');
+        return $this->render('security/profile.html.twig');
     }
 }

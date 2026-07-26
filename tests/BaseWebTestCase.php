@@ -112,4 +112,10 @@ class BaseWebTestCase extends WebTestCase
         $client->followRedirect();
         self::assertResponseIsSuccessful();
     }
+
+    protected function getPropertyValue(mixed $object, string $property): mixed
+    {
+        $reflection = new \ReflectionProperty($object, $property);
+        return $reflection->getValue($object);
+    }
 }

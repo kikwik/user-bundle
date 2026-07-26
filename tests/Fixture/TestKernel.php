@@ -89,6 +89,10 @@ class TestKernel extends Kernel
 
         $container->extension('kikwik_user', [
             'user_class' => User::class,
+            'user_identifier_field' => 'username',
+            'user_email_field' => 'email',
+            'sender_email' => 'test@example.com',
+            'sender_name' => 'Test'
         ]);
 
         $container->extension('doctrine', [

@@ -30,9 +30,9 @@ class KikwikUserBundleTest extends BaseWebTestCase
         ];
         foreach($services as $serviceId => $serviceClass)
         {
-            $this->assertTrue($container->has($serviceId),'Container must have '.$serviceId);
+            self::assertTrue($container->has($serviceId),'Container must have '.$serviceId);
             $service = $container->get($serviceId);
-            $this->assertInstanceOf($serviceClass, $service, 'Service '.$serviceId.' must be an instance of '.$serviceClass);
+            self::assertInstanceOf($serviceClass, $service, 'Service '.$serviceId.' must be an instance of '.$serviceClass);
         }
     }
 
