@@ -23,31 +23,53 @@ class LoginSubscriberTest extends BaseWebTestCase
 
         // first login
         $client = $this->createTestClient();
+        $beforeLoginTimestamp = time();
         $this->doLogin($client);
+        $afterLoginTimestamp = time();
 
 
-        // refresh user and check data after first login
+        // refresh user
         $user = UserFactory::repository()->first();
+        // check loginCount
         $this->assertEquals(1, $user->getLoginCount());
-        $this->assertNotNull($user->getLastLoginAt());
-        $this->assertEquals('127.0.0.1', $user->getLastLoginFromIp());
+        // check lastLoginAt
+        $firstLoginAt = $user->getLastLoginAt();
+        $this->assertNotNull($firstLoginAt);
+        $this->assertGreaterThanOrEqual($beforeLoginTimestamp, $firstLoginAt->getTimestamp());
+        $this->assertLessThanOrEqual($afterLoginTimestamp, $firstLoginAt->getTimestamp());
+        // check lastLoginFromIp
+        $firstLoginFromIp = $user->getLastLoginFromIp();
+        $this->assertEquals('127.0.0.1', $firstLoginFromIp);
+        // check previousLoginAt
         $this->assertNull($user->getPreviousLoginAt());
+        // check previousLoginFromIp
         $this->assertNull($user->getPreviousLoginFromIp());
+
+
 
         // logout and second login
         $this->doLogout($client);
         sleep(1);
+        $beforeLoginTimestamp = time();
         $this->doLogin($client);
+        $afterLoginTimestamp = time();
 
-        // refresh user and check data after second login
+        // refresh user
         $user = UserFactory::repository()->first();
+        // check loginCount
         $this->assertEquals(2, $user->getLoginCount());
-        $this->assertNotNull($user->getLastLoginAt());
+        // check lastLoginAt
+        $secondLoginAt = $user->getLastLoginAt();
+        $this->assertNotNull($secondLoginAt);
+        $this->assertGreaterThanOrEqual($beforeLoginTimestamp, $secondLoginAt->getTimestamp());
+        $this->assertLessThanOrEqual($afterLoginTimestamp, $secondLoginAt->getTimestamp());
+        // check lastLoginFromIp
         $this->assertEquals('127.0.0.1', $user->getLastLoginFromIp());
-        $this->assertNotNull($user->getPreviousLoginAt());
-        $this->assertEquals('127.0.0.1', $user->getLastLoginFromIp());
+        // check previousLoginAt
+        $this->assertEquals($firstLoginAt, $user->getPreviousLoginAt());
+        // check previousLoginFromIp
+        $this->assertEquals($firstLoginFromIp, $user->getPreviousLoginFromIp());
 
-        $this->assertLessThan($user->getLastLoginAt(), $user->getPreviousLoginAt());
     }
 
 
