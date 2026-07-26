@@ -37,7 +37,8 @@ class TestKernel extends Kernel
 
     private function configureRoutes(RoutingConfigurator $routes): void
     {
-        $routes->import($this->getProjectDir().'/src/Resources/config/routes.php');
+        $routes->import($this->getProjectDir().'/src/Resources/config/routes.php')
+            ->prefix('/password');
 
         $routes->import(
             $this->getProjectDir().'/tests/Fixture/Controller/',
