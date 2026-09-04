@@ -288,7 +288,7 @@ class PasswordController
         return $this->formFactory->create($type, $data, $options);
     }
 
-    protected function render(string $view, array $parameters = [], Response $response = null): Response
+    protected function render(string $view, array $parameters = [], ?Response $response = null): Response
     {
         $content = $this->twig->render($view, $parameters);
 
