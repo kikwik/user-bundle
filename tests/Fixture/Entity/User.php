@@ -55,7 +55,7 @@ class User extends BaseUser implements UserInterface, PasswordAuthenticatedUserI
         return $this->username;
     }
 
-    public function setUsername(?string $username): static
+    public function setUsername(?string $username): self
     {
         $this->username = $username;
 
@@ -68,7 +68,7 @@ class User extends BaseUser implements UserInterface, PasswordAuthenticatedUserI
         return $this->email;
     }
 
-    public function setEmail(?string $email): static
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
 
@@ -90,7 +90,7 @@ class User extends BaseUser implements UserInterface, PasswordAuthenticatedUserI
     /**
      * @param list<string> $roles
      */
-    public function setRoles(array $roles): static
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
 
@@ -105,7 +105,7 @@ class User extends BaseUser implements UserInterface, PasswordAuthenticatedUserI
         return $this->password;
     }
 
-    public function setPassword(?string $password): static
+    public function setPassword(?string $password): self
     {
         $this->password = $password;
 
